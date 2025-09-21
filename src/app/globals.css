@@ -1,26 +1,103 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.cdnfonts.com/css/neue-montreal');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #000000;
+  --beige: #F5F0E6;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  cursor: none; /* Hide default cursor */
+}
+
+/* Ensure all elements use the custom cursor */
+* {
+  cursor: none !important;
+}
+
+/* Ensure cursor appears over all elements */
+.custom-cursor {
+  z-index: 9999 !important;
+  pointer-events: none !important;
+}
+
+/* Ensure only one cursor exists */
+#aurano-custom-cursor {
+  z-index: 9999 !important;
+  pointer-events: none !important;
+}
+
+/* Hide any duplicate cursors - targeted rules */
+.custom-cursor:not(#aurano-custom-cursor) {
+  display: none !important;
+}
+
+/* Hide any other cursor elements except our main one */
+[class*="cursor"]:not(#aurano-custom-cursor) {
+  display: none !important;
+}
+
+/* Ensure only our cursor is visible */
+div[id*="cursor"]:not(#aurano-custom-cursor) {
+  display: none !important;
+}
+
+/* Pulse animation for cursor glow effects */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Neue Montreal Medium', sans-serif;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* Grain texture effect */
+.grain-texture {
+  position: relative;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(245, 240, 230, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(245, 240, 230, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(245, 240, 230, 0.02) 0%, transparent 50%);
+  background-size: 200px 200px, 300px 300px, 150px 150px;
+}
+
+/* Hide scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+html {
+  scrollbar-width: none;
 }
