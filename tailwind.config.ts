@@ -63,6 +63,9 @@ const config: Config = {
         "fade-in": "fadeIn 0.5s ease-in-out",
         "slide-up": "slideUp 0.5s ease-out",
         "float": "float 6s ease-in-out infinite",
+        "auto-rotate": "autoRotate 8s ease-in-out infinite",
+        "auto-scroll": "autoScroll 30s ease-in-out infinite",
+        "light-strike": "lightStrike 3s ease-in-out infinite",
       },
       keyframes: {
         fadeIn: {
@@ -76,6 +79,28 @@ const config: Config = {
         float: {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-20px)" },
+        },
+        autoRotate: {
+          "0%": { transform: "rotateY(0deg)" },
+          "25%": { transform: "rotateY(2deg)" },
+          "50%": { transform: "rotateY(0deg)" },
+          "75%": { transform: "rotateY(-2deg)" },
+          "100%": { transform: "rotateY(0deg)" },
+        },
+        autoScroll: {
+          "0%": { transform: "translateX(0)" },
+          "20%": { transform: "translateX(-22.2%)" },
+          "40%": { transform: "translateX(-44.4%)" },
+          "60%": { transform: "translateX(-66.6%)" },
+          "80%": { transform: "translateX(-72%)" },
+          "100%": { transform: "translateX(0)" },
+        },
+        lightStrike: {
+          "0%": { boxShadow: "0 0 0 0 #F5F0E6, 0 0 0 0 #F5F0E6, 0 0 0 0 #F5F0E6, 0 0 0 0 #F5F0E6" },
+          "25%": { boxShadow: "0 0 0 2px #F5F0E6, 0 0 0 0 #F5F0E6, 0 0 0 0 #F5F0E6, 0 0 0 0 #F5F0E6" },
+          "50%": { boxShadow: "0 0 0 0 #F5F0E6, 0 0 0 2px #F5F0E6, 0 0 0 0 #F5F0E6, 0 0 0 0 #F5F0E6" },
+          "75%": { boxShadow: "0 0 0 0 #F5F0E6, 0 0 0 0 #F5F0E6, 0 0 0 2px #F5F0E6, 0 0 0 0 #F5F0E6" },
+          "100%": { boxShadow: "0 0 0 0 #F5F0E6, 0 0 0 0 #F5F0E6, 0 0 0 0 #F5F0E6, 0 0 0 2px #F5F0E6" },
         },
       },
     },

@@ -59,30 +59,33 @@ export default function DemoSection() {
   ]
 
   return (
-    <section id="demo" className="py-16 sm:py-20 lg:py-24 xl:py-32 2xl:py-40 3xl:py-48 4xl:py-56 5xl:py-64 bg-black relative overflow-hidden">
+    <section id="demo" className="py-8 sm:py-10 lg:py-12 xl:py-14 2xl:py-16 3xl:py-18 4xl:py-20 5xl:py-22 bg-black relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 lg:w-[28rem] lg:h-[28rem] xl:w-[32rem] xl:h-[32rem] 2xl:w-[40rem] 2xl:h-[40rem] 3xl:w-[48rem] 3xl:h-[48rem] 4xl:w-[56rem] 4xl:h-[56rem] 5xl:w-[64rem] 5xl:h-[64rem] bg-beige/3 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 lg:w-[28rem] lg:h-[28rem] xl:w-[32rem] xl:h-[32rem] 2xl:w-[40rem] 2xl:h-[40rem] 3xl:w-[48rem] 3xl:h-[48rem] 4xl:w-[56rem] 4xl:h-[56rem] 5xl:w-[64rem] 5xl:h-[64rem] bg-green-400/3 rounded-full blur-3xl" />
       </div>
 
-      <div className="max-w-7xl 2xl:max-w-8xl 3xl:max-w-9xl 4xl:max-w-[120rem] 5xl:max-w-[140rem] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 5xl:px-28 relative">
+      <div className="w-full flex justify-center items-center">
+        <div className="w-full max-w-5xl px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 5xl:px-28 relative">
         <motion.div 
-          className="text-center mb-12 sm:mb-16 lg:mb-20 xl:mb-24 2xl:mb-28 3xl:mb-32 4xl:mb-36 5xl:mb-40"
+          className="text-center mb-8 sm:mb-12 lg:mb-16 xl:mb-20 2xl:mb-24 3xl:mb-28 4xl:mb-32 5xl:mb-36"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-serif font-bold text-beige mb-3 sm:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10">
-            See it in action
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-serif font-bold mb-3 sm:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10">
+            <span className="bg-gradient-to-b from-beige via-beige/80 to-beige/50 bg-clip-text text-transparent">
+              See it in action
+            </span>
           </h2>
           <p className="text-base sm:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl text-beige/70 max-w-xl sm:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl mx-auto">
             Experience how voice input transforms into organized tasks, step by step
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 sm:gap-3 lg:gap-4 xl:gap-5 2xl:gap-6 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 sm:gap-3 lg:gap-4 xl:gap-5 2xl:gap-6 items-start w-full">
           {/* Interactive Story Steps */}
           <div className="space-y-2 sm:space-y-3 lg:space-y-4 xl:space-y-5 2xl:space-y-6 w-full">
             {steps.map((step, index) => {
@@ -208,24 +211,6 @@ export default function DemoSection() {
                       </motion.div>
                     </div>
 
-                    {/* Status Indicator */}
-                    <motion.div
-                      className={`w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 xl:w-10 xl:h-10 2xl:w-12 2xl:h-12 3xl:w-16 3xl:h-16 4xl:w-20 4xl:h-20 5xl:w-24 5xl:h-24 rounded-full flex items-center justify-center ${
-                        isVisible ? 'bg-beige' : 'bg-beige/20'
-                      }`}
-                      animate={{
-                        scale: isVisible ? [1, 1.2, 1] : 1
-                      }}
-                      transition={{ duration: 0.6, repeat: isVisible ? Infinity : 0 }}
-                    >
-                      {isVisible ? (
-                        <motion.div
-                          className="w-1.5 h-1.5 sm:w-2 sm:h-2 lg:w-3 lg:h-3 xl:w-4 xl:h-4 2xl:w-5 2xl:h-5 3xl:w-6 3xl:h-6 4xl:w-8 4xl:h-8 5xl:w-10 5xl:h-10 bg-black rounded-full"
-                          animate={{ scale: [1, 1.5, 1] }}
-                          transition={{ duration: 0.8, repeat: Infinity }}
-                        />
-                      ) : null}
-                    </motion.div>
                   </motion.div>
 
                   {/* Connecting Arrow */}
@@ -257,16 +242,16 @@ export default function DemoSection() {
           </div>
 
           {/* Live Dashboard Preview */}
-          <div className="sticky top-16 sm:top-20 lg:top-24 xl:top-28 2xl:top-32 3xl:top-36 4xl:top-40 5xl:top-44">
+          <div className="flex items-end -mt-2">
             <motion.div 
-              className="bg-beige/5 border-2 border-beige/30 rounded-2xl sm:rounded-3xl lg:rounded-[2rem] xl:rounded-[2.5rem] 2xl:rounded-[3rem] 3xl:rounded-[3.5rem] 4xl:rounded-[4rem] 5xl:rounded-[4.5rem] shadow-2xl p-6 sm:p-8 lg:p-10 xl:p-12 2xl:p-16 3xl:p-20 4xl:p-24 5xl:p-28 backdrop-blur-sm"
-              initial={{ opacity: 0, y: 50 }}
+              className="bg-beige/5 border-2 border-beige/30 rounded-2xl sm:rounded-3xl lg:rounded-[2rem] xl:rounded-[2.5rem] 2xl:rounded-[3rem] 3xl:rounded-[3.5rem] 4xl:rounded-[4rem] 5xl:rounded-[4.5rem] shadow-2xl p-6 sm:p-8 lg:p-10 xl:p-12 2xl:p-16 3xl:p-20 4xl:p-24 5xl:p-28 backdrop-blur-sm min-h-[880px] flex flex-col"
+              initial={{ opacity: 0, y: 0 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
               {/* Header */}
-              <div className="flex items-center justify-between mb-6 sm:mb-8 lg:mb-10 xl:mb-12 2xl:mb-14 3xl:mb-16 4xl:mb-18 5xl:mb-20">
+              <div className="flex items-center justify-between mb-4 sm:mb-6 lg:mb-8 xl:mb-10 2xl:mb-12 3xl:mb-14 4xl:mb-16 5xl:mb-18">
                 <h3 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl font-serif font-semibold text-beige">Dashboard</h3>
                 <motion.div 
                   className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14 2xl:w-16 2xl:h-16 3xl:w-20 3xl:h-20 4xl:w-24 4xl:h-24 5xl:w-28 5xl:h-28 bg-beige rounded-full flex items-center justify-center"
@@ -281,7 +266,7 @@ export default function DemoSection() {
               </div>
 
               {/* Tasks */}
-              <div className="space-y-3 sm:space-y-4 lg:space-y-5 xl:space-y-6 2xl:space-y-7 3xl:space-y-8 4xl:space-y-9 5xl:space-y-10 mb-6 sm:mb-8 lg:mb-10 xl:mb-12 2xl:mb-14 3xl:mb-16 4xl:mb-18 5xl:mb-20">
+              <div className="space-y-2 sm:space-y-3 lg:space-y-4 xl:space-y-5 2xl:space-y-6 3xl:space-y-7 4xl:space-y-8 5xl:space-y-9 mb-4 sm:mb-6 lg:mb-8 xl:mb-10 2xl:mb-12 3xl:mb-14 4xl:mb-16 5xl:mb-18">
                 {[
                   { text: "Finish quarterly report", category: "Work", completed: true },
                   { text: "Go to gym", category: "Health", completed: false },
@@ -316,7 +301,7 @@ export default function DemoSection() {
               </div>
 
               {/* Categories */}
-              <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-5 xl:gap-6 2xl:gap-7 3xl:gap-8 4xl:gap-9 5xl:gap-10 mb-4 sm:mb-6 lg:mb-8 xl:mb-10 2xl:mb-12 3xl:mb-14 4xl:mb-16 5xl:mb-18">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4 xl:gap-5 2xl:gap-6 3xl:gap-7 4xl:gap-8 5xl:gap-9 mb-4 sm:mb-6 lg:mb-8 xl:mb-10 2xl:mb-12 3xl:mb-14 4xl:mb-16 5xl:mb-18">
                 <motion.div 
                   className="text-center p-3 sm:p-4 lg:p-5 xl:p-6 2xl:p-8 3xl:p-10 4xl:p-12 5xl:p-14 bg-beige/10 rounded-lg lg:rounded-xl xl:rounded-2xl 2xl:rounded-3xl 3xl:rounded-[1.5rem] 4xl:rounded-[2rem] 5xl:rounded-[2.5rem]"
                   animate={{
@@ -343,7 +328,7 @@ export default function DemoSection() {
 
               {/* Productivity Score */}
               <motion.div 
-                className="p-4 sm:p-6 lg:p-8 xl:p-10 2xl:p-12 3xl:p-14 4xl:p-16 5xl:p-18 bg-beige rounded-lg lg:rounded-xl xl:rounded-2xl 2xl:rounded-3xl 3xl:rounded-[1.5rem] 4xl:rounded-[2rem] 5xl:rounded-[2.5rem] text-center"
+                className="p-4 sm:p-6 lg:p-8 xl:p-10 2xl:p-12 3xl:p-14 4xl:p-16 5xl:p-18 bg-beige rounded-lg lg:rounded-xl xl:rounded-2xl 2xl:rounded-3xl 3xl:rounded-[1.5rem] 4xl:rounded-[2rem] 5xl:rounded-[2.5rem] text-center mb-4 sm:mb-6 lg:mb-8 xl:mb-10 2xl:mb-12 3xl:mb-14 4xl:mb-16 5xl:mb-18"
                 animate={{
                   scale: [1, 1.05, 1],
                   boxShadow: '0 0 30px rgba(245, 240, 230, 0.3)'
@@ -359,10 +344,48 @@ export default function DemoSection() {
                 >
                   87%
                 </motion.div>
-                <div className="text-black/80 text-sm sm:text-base lg:text-lg xl:text-xl 2xl:text-2xl 3xl:text-3xl 4xl:text-4xl 5xl:text-5xl">Productivity Score</div>
+                <div className="text-black/80 text-sm sm:text-base lg:text-lg xl:text-xl 2xl:text-2xl 3xl:text-3xl 4xl:text-4xl 5xl:text-5xl mb-3 sm:mb-4 lg:mb-5 xl:mb-6 2xl:mb-7 3xl:mb-8 4xl:mb-9 5xl:mb-10">Productivity Score</div>
+                
+                {/* Progress Bar */}
+                <div className="w-full bg-black/10 rounded-full h-2 sm:h-3 lg:h-4 xl:h-5 2xl:h-6 3xl:h-8 4xl:h-10 5xl:h-12 mb-3 sm:mb-4 lg:mb-5 xl:mb-6 2xl:mb-7 3xl:mb-8 4xl:mb-9 5xl:mb-10">
+                  <motion.div 
+                    className="bg-gradient-to-r from-green-400 to-green-600 h-full rounded-full shadow-lg"
+                    initial={{ width: 0 }}
+                    animate={{ 
+                      width: "87%",
+                      boxShadow: [
+                        "0 0 0px rgba(34, 197, 94, 0)",
+                        "0 0 8px rgba(34, 197, 94, 0.3)",
+                        "0 0 12px rgba(34, 197, 94, 0.2)"
+                      ]
+                    }}
+                    transition={{ 
+                      duration: 2, 
+                      delay: 0.5,
+                      ease: "easeOut"
+                    }}
+                    whileHover={{
+                      scale: 1.02,
+                      boxShadow: "0 0 15px rgba(34, 197, 94, 0.4)"
+                    }}
+                  />
+                </div>
+                
+                {/* Additional Stats */}
+                <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4 xl:gap-5 2xl:gap-6 3xl:gap-7 4xl:gap-8 5xl:gap-9">
+                  <div className="text-center">
+                    <div className="text-black text-lg sm:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl font-bold">23</div>
+                    <div className="text-black/60 text-xs sm:text-sm lg:text-base xl:text-lg 2xl:text-xl 3xl:text-2xl 4xl:text-3xl 5xl:text-4xl">Tasks Done</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-black text-lg sm:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl 3xl:text-5xl 4xl:text-6xl 5xl:text-7xl font-bold">5</div>
+                    <div className="text-black/60 text-xs sm:text-sm lg:text-base xl:text-lg 2xl:text-xl 3xl:text-2xl 4xl:text-3xl 5xl:text-4xl">Streak Days</div>
+                  </div>
+                </div>
               </motion.div>
             </motion.div>
           </div>
+        </div>
         </div>
       </div>
     </section>

@@ -7,14 +7,12 @@ import CreatorMessageSection from '@/components/landing/CreatorMessageSection'
 import TestimonialsSection from '@/components/landing/TestimonialsSection'
 import CTASection from '@/components/landing/CTASection'
 import Footer from '@/components/landing/Footer'
-import StatsCounter from '@/components/landing/StatsCounter'
 import Navigation from '@/components/landing/Navigation'
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-black text-beige">
       <Navigation />
-      <StatsCounter />
       <HeroSection />
       <ProblemsSection />
       <TimeClaimedSection />

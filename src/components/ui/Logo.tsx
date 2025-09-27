@@ -7,9 +7,10 @@ interface LogoProps {
   className?: string
   variant?: 'icon' | 'text'
   constrained?: boolean
+  trademarkSize?: 'xs' | 'sm' | 'md' | 'lg' | 'xxs'
 }
 
-export default function Logo({ size = 'md', className = '', variant = 'text', constrained = false }: LogoProps) {
+export default function Logo({ size = 'md', className = '', variant = 'text', constrained = false, trademarkSize }: LogoProps) {
   const sizeClasses = {
     xs: 'h-6',
     sm: 'h-8',
@@ -25,6 +26,7 @@ export default function Logo({ size = 'md', className = '', variant = 'text', co
   }
 
   const trademarkSizes = {
+    xxs: 'text-xs',
     xs: 'text-xs',
     sm: 'text-xs',
     md: 'text-xs',
@@ -130,11 +132,12 @@ export default function Logo({ size = 'md', className = '', variant = 'text', co
           </span>
           {/* Trademark symbol - positioned in upper right corner of 'o' */}
           <span 
-            className={`absolute text-white z-20 ${trademarkSizes[size]}`}
+            className={`absolute text-white z-20 ${trademarkSizes[trademarkSize || size]}`}
             style={{ 
-              top: size === 'xs' ? '-0.15em' : '-0.2em',
-              right: size === 'xs' ? '-0.6em' : '-0.8em',
-              fontSize: size === 'xs' ? '0.25em' : '0.4em'
+              top: (trademarkSize || size) === 'xs' || (trademarkSize || size) === 'xxs' ? '-0.15em' : '-0.2em',
+              right: (trademarkSize || size) === 'xs' || (trademarkSize || size) === 'xxs' ? '-0.6em' : '-0.8em',
+              fontSize: (trademarkSize || size) === 'xxs' ? '0.2em' : 
+                       (trademarkSize || size) === 'xs' ? '0.25em' : '0.4em'
             }}
           >
             ®

@@ -35,8 +35,10 @@ export default function TestimonialsSection() {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-beige mb-6">
-            What people are saying
+          <h2 className="text-4xl md:text-5xl font-serif font-bold mb-6">
+            <span className="bg-gradient-to-b from-beige via-beige/80 to-beige/50 bg-clip-text text-transparent">
+              What people are saying
+            </span>
           </h2>
               <p className="text-xl text-beige/70 max-w-2xl mx-auto">
                 Join hundreds who are already transforming their productivity
@@ -47,7 +49,7 @@ export default function TestimonialsSection() {
           {testimonials.map((testimonial, index) => (
             <motion.div
               key={index}
-              className="bg-black border border-beige/20 p-8 rounded-2xl shadow-sm"
+              className="bg-black border border-beige/20 p-8 rounded-2xl shadow-sm flex flex-col h-full"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
@@ -61,18 +63,18 @@ export default function TestimonialsSection() {
               </div>
 
               {/* Testimonial Text */}
-              <blockquote className="text-beige/80 mb-6 leading-relaxed">
+              <blockquote className="text-beige/80 mb-6 leading-relaxed flex-1">
                 "{testimonial.text}"
               </blockquote>
 
               {/* Author */}
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-beige/20 border border-beige/30 rounded-full flex items-center justify-center">
+              <div className="flex items-center gap-3 mt-auto">
+                <div className="w-10 h-10 bg-beige/20 border border-beige/30 rounded-full flex items-center justify-center flex-shrink-0">
                   <span className="text-beige font-semibold text-sm">
                     {testimonial.author.split(' ').map(n => n[0]).join('')}
                   </span>
                 </div>
-                <div>
+                <div className="flex flex-col justify-center">
                   <div className="font-semibold text-beige text-sm">{testimonial.author}</div>
                   <div className="text-beige/60 text-xs">{testimonial.role}</div>
                 </div>

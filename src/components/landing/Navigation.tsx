@@ -1,16 +1,66 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Menu, X, ArrowUpRight } from 'lucide-react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import Logo from '@/components/ui/Logo'
+import GlowingButton from '@/components/ui/GlowingButton'
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [showLogo, setShowLogo] = useState(false)
+  const { scrollYProgress } = useScroll()
+  
+  // Trigger logo animation when scrolling past hero section
+  const scrollValue = useTransform(scrollYProgress, [0, 0.1], [0, 1])
+  
+  useEffect(() => {
+    const unsubscribe = scrollValue.onChange((value) => {
+      if (value > 0.5 && !showLogo) {
+        setShowLogo(true)
+      } else if (value <= 0.5 && showLogo) {
+        setShowLogo(false)
+      }
+    })
+    
+    return () => unsubscribe()
+  }, [scrollValue, showLogo])
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-transparent">
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 5xl:px-28 py-2">
         <div className="flex justify-center items-center h-8 sm:h-10 lg:h-12 xl:h-14 2xl:h-16">
+          {/* Logo - Left Side */}
+          <motion.div
+            initial={{ 
+              scale: 0, 
+              opacity: 0, 
+              x: -120, 
+              y: 20 
+            }}
+            animate={showLogo ? { 
+              scale: 1, 
+              opacity: 1, 
+              x: 0, 
+              y: 0 
+            } : { 
+              scale: 0, 
+              opacity: 0, 
+              x: -120, 
+              y: 20 
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 200,
+              damping: 20,
+              mass: 1.2,
+              duration: 0.8
+            }}
+            className="flex-shrink-0 absolute left-4 sm:left-6 lg:left-8 xl:left-12 2xl:left-16 3xl:left-20 4xl:left-24 5xl:left-28"
+          >
+            <Logo size="sm" variant="text" />
+          </motion.div>
+          
           {/* Desktop Navigation - Centered */}
           <div className="hidden md:block">
             <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg lg:rounded-xl xl:rounded-2xl 2xl:rounded-3xl px-2 sm:px-3 lg:px-4 xl:px-6 2xl:px-8 py-1 sm:py-1 lg:py-2 xl:py-2 2xl:py-3">
@@ -27,9 +77,12 @@ export default function Navigation() {
                 <a href="#testimonials" className="text-white hover:text-white/80 px-1 sm:px-1 lg:px-2 xl:px-3 2xl:px-4 py-1 text-xs sm:text-xs lg:text-sm xl:text-base 2xl:text-lg font-medium transition-colors">
                   Testimonials
                 </a>
-                <a href="#waitlist" className="bg-beige/20 text-beige px-2 sm:px-2 lg:px-3 xl:px-4 2xl:px-5 py-1 rounded-full lg:rounded-lg xl:rounded-xl 2xl:rounded-2xl text-xs sm:text-xs lg:text-sm xl:text-base 2xl:text-lg font-medium hover:bg-beige/30 transition-colors border border-beige/30">
+                <GlowingButton
+                  href="#waitlist"
+                  className="px-2 sm:px-2 lg:px-3 xl:px-4 2xl:px-5 py-1 text-xs sm:text-xs lg:text-sm xl:text-base 2xl:text-lg"
+                >
                   Join Waitlist
-                </a>
+                </GlowingButton>
               </div>
             </div>
           </div>
@@ -62,9 +115,12 @@ export default function Navigation() {
                 <a href="#testimonials" className="text-white hover:text-white/80 block px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm font-medium">
                   Testimonials
                 </a>
-                <a href="#waitlist" className="bg-beige/20 text-beige block px-3 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium hover:bg-beige/30 transition-colors text-center border border-beige/30">
+                <GlowingButton
+                  href="#waitlist"
+                  className="block px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-center"
+                >
                   Join Waitlist
-                </a>
+                </GlowingButton>
               </div>
             </div>
           </div>

@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { Mail, CheckCircle } from 'lucide-react'
+import GlowingButton from '@/components/ui/GlowingButton'
 
 export default function CTASection() {
   const [email, setEmail] = useState('')
@@ -31,7 +32,9 @@ export default function CTASection() {
           viewport={{ once: true }}
         >
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-serif font-bold mb-3 sm:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10">
-            Join the Beta Waitlist Today
+            <span className="bg-gradient-to-b from-beige via-beige/80 to-beige/50 bg-clip-text text-transparent">
+              Join the Beta Waitlist Today
+            </span>
           </h2>
           <p className="text-base sm:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl text-beige/80 mb-6 sm:mb-8 lg:mb-10 xl:mb-12 2xl:mb-16 max-w-xl sm:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl mx-auto">
             Be among the first to experience voice-powered productivity. Get early access and exclusive updates.
@@ -54,13 +57,14 @@ export default function CTASection() {
                 required
               />
               
-              <button
+              <GlowingButton
                 onClick={handleSubmit}
                 disabled={isLoading}
-                className="w-full sm:w-auto px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12 py-2 sm:py-3 lg:py-4 xl:py-5 2xl:py-6 bg-beige text-black rounded-full lg:rounded-xl xl:rounded-2xl 2xl:rounded-3xl font-semibold flex-shrink-0 transition-all duration-300 hover:bg-beige/80 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl text-xs sm:text-sm lg:text-base xl:text-lg 2xl:text-xl"
+                className="w-full sm:w-auto px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12 py-2 sm:py-3 lg:py-4 xl:py-5 2xl:py-6 text-xs sm:text-sm lg:text-base xl:text-lg 2xl:text-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                variant="secondary"
               >
                 {isLoading ? 'Joining...' : 'Join Waitlist'}
-              </button>
+              </GlowingButton>
             </div>
           </div>
 
@@ -83,23 +87,23 @@ export default function CTASection() {
 
           {/* Benefits */}
           <motion.div
-            className="mt-12 sm:mt-16 lg:mt-20 xl:mt-24 2xl:mt-28 3xl:mt-32 4xl:mt-36 5xl:mt-40 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14 3xl:gap-16 4xl:gap-18 5xl:gap-20"
+            className="mt-12 sm:mt-16 lg:mt-20 xl:mt-24 2xl:mt-28 3xl:mt-32 4xl:mt-36 5xl:mt-40 flex flex-col md:flex-row justify-center items-center gap-8 sm:gap-12 lg:gap-16 xl:gap-20 2xl:gap-24"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
             viewport={{ once: true }}
           >
             <div className="text-center">
-              <div className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-7xl 4xl:text-8xl 5xl:text-9xl font-bold mb-1 sm:mb-2 lg:mb-3 xl:mb-4 2xl:mb-5 3xl:mb-6 4xl:mb-7 5xl:mb-8 text-beige">Early Access</div>
-              <div className="text-sm sm:text-base lg:text-lg xl:text-xl 2xl:text-2xl 3xl:text-3xl 4xl:text-4xl 5xl:text-5xl text-beige/70">Be the first to try Aurano</div>
+              <div className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold mb-3 sm:mb-4 lg:mb-5 xl:mb-6 2xl:mb-8 text-beige whitespace-nowrap">Early Access</div>
+              <div className="text-base sm:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl text-beige/70 whitespace-nowrap">Be the first to try Aurano</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-7xl 4xl:text-8xl 5xl:text-9xl font-bold mb-1 sm:mb-2 lg:mb-3 xl:mb-4 2xl:mb-5 3xl:mb-6 4xl:mb-7 5xl:mb-8 text-beige">Exclusive Updates</div>
-              <div className="text-sm sm:text-base lg:text-lg xl:text-xl 2xl:text-2xl 3xl:text-3xl 4xl:text-4xl 5xl:text-5xl text-beige/70">Get insider news and features</div>
+              <div className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold mb-3 sm:mb-4 lg:mb-5 xl:mb-6 2xl:mb-8 text-beige whitespace-nowrap">Exclusive Updates</div>
+              <div className="text-base sm:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl text-beige/70 whitespace-nowrap">Get insider news and features</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-7xl 4xl:text-8xl 5xl:text-9xl font-bold mb-1 sm:mb-2 lg:mb-3 xl:mb-4 2xl:mb-5 3xl:mb-6 4xl:mb-7 5xl:mb-8 text-beige">Special Pricing</div>
-              <div className="text-sm sm:text-base lg:text-lg xl:text-xl 2xl:text-2xl 3xl:text-3xl 4xl:text-4xl 5xl:text-5xl text-beige/70">Founding member discounts</div>
+              <div className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold mb-3 sm:mb-4 lg:mb-5 xl:mb-6 2xl:mb-8 text-beige whitespace-nowrap">Special Pricing</div>
+              <div className="text-base sm:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl text-beige/70 whitespace-nowrap">Founding member discounts</div>
             </div>
           </motion.div>
         </motion.div>

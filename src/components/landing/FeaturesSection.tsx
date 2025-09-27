@@ -35,8 +35,10 @@ export default function FeaturesSection() {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-serif font-bold text-beige mb-3 sm:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10">
-            How it works
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-serif font-bold mb-3 sm:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10">
+            <span className="bg-gradient-to-b from-beige via-beige/80 to-beige/50 bg-clip-text text-transparent">
+              How it works
+            </span>
           </h2>
           <p className="text-base sm:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl text-beige/70 max-w-xl sm:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl mx-auto">
             Three simple steps to transform your voice into organized action
@@ -47,7 +49,7 @@ export default function FeaturesSection() {
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
-              className="text-center group"
+              className="text-center group flex flex-col h-full"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
@@ -87,15 +89,23 @@ export default function FeaturesSection() {
               </div>
 
               {/* Content */}
-              <h3 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl 3xl:text-6xl 4xl:text-7xl 5xl:text-8xl font-serif font-semibold text-beige mb-1 sm:mb-2 lg:mb-3 xl:mb-4 2xl:mb-5 3xl:mb-6 4xl:mb-7 5xl:mb-8">
-                {feature.title}
-              </h3>
-              <p className="text-base sm:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl 5xl:text-6xl text-beige/80 mb-2 sm:mb-4 lg:mb-5 xl:mb-6 2xl:mb-7 3xl:mb-8 4xl:mb-9 5xl:mb-10 font-medium">
-                {feature.description}
-              </p>
-              <p className="text-sm sm:text-base lg:text-lg xl:text-xl 2xl:text-2xl 3xl:text-3xl 4xl:text-4xl 5xl:text-5xl text-beige/60 leading-relaxed">
-                {feature.details}
-              </p>
+              <div className="flex flex-col h-full flex-1">
+                <div className="min-h-[80px] flex items-center justify-center">
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl 3xl:text-6xl 4xl:text-7xl 5xl:text-8xl font-serif font-semibold text-beige">
+                    {feature.title}
+                  </h3>
+                </div>
+                <div className="min-h-[60px] flex items-start justify-center mb-2 sm:mb-4 lg:mb-5 xl:mb-6 2xl:mb-7 3xl:mb-8 4xl:mb-9 5xl:mb-10">
+                  <p className="text-base sm:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl 5xl:text-6xl text-beige/80 font-medium">
+                    {feature.description}
+                  </p>
+                </div>
+                <div className="flex-1 flex items-start justify-center">
+                  <p className="text-sm sm:text-base lg:text-lg xl:text-xl 2xl:text-2xl 3xl:text-3xl 4xl:text-4xl 5xl:text-5xl text-beige/60 leading-relaxed">
+                    {feature.details}
+                  </p>
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>
