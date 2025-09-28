@@ -6,7 +6,7 @@ import Image from 'next/image'
 
 export default function CreatorMessageSection() {
   return (
-    <section className="py-32 sm:py-40 lg:py-48 xl:py-56 2xl:py-64 bg-black">
+    <section className="py-16 sm:py-40 lg:py-48 xl:py-56 2xl:py-64 bg-black">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

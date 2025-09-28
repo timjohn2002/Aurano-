@@ -26,8 +26,8 @@ const features = [
 
 export default function FeaturesSection() {
   return (
-    <section id="features" className="py-16 sm:py-20 lg:py-24 xl:py-32 2xl:py-40 3xl:py-48 4xl:py-56 5xl:py-64 bg-black">
-      <div className="max-w-7xl 2xl:max-w-8xl 3xl:max-w-9xl 4xl:max-w-[120rem] 5xl:max-w-[140rem] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 5xl:px-28">
+    <section id="features" className="pt-8 pb-4 sm:pt-20 sm:pb-10 lg:pt-24 lg:pb-12 xl:pt-32 xl:pb-16 2xl:pt-40 2xl:pb-20 3xl:pt-48 3xl:pb-24 4xl:pt-56 4xl:pb-28 5xl:pt-64 5xl:pb-32 bg-black">
+      <div className="max-w-7xl 2xl:max-w-8xl 3xl:max-w-9xl 4xl:max-w-[120rem] 5xl:max-w-[140rem] mx-auto px-3 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 5xl:px-28">
         <motion.div
           className="text-center mb-12 sm:mb-16 lg:mb-20 xl:mb-24 2xl:mb-28 3xl:mb-32 4xl:mb-36 5xl:mb-40"
           initial={{ opacity: 0, y: 30 }}
@@ -45,7 +45,7 @@ export default function FeaturesSection() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 lg:gap-16 xl:gap-20 2xl:gap-24 3xl:gap-28 4xl:gap-32 5xl:gap-36">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-12 lg:gap-16 xl:gap-20 2xl:gap-24 3xl:gap-28 4xl:gap-32 5xl:gap-36">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
@@ -89,13 +89,13 @@ export default function FeaturesSection() {
               </div>
 
               {/* Content */}
-              <div className="flex flex-col h-full flex-1">
-                <div className="min-h-[80px] flex items-center justify-center">
+              <div className="flex flex-col h-full flex-1 space-y-2 sm:space-y-3 lg:space-y-4 xl:space-y-5 2xl:space-y-6 3xl:space-y-7 4xl:space-y-8 5xl:space-y-9">
+                <div className="flex items-center justify-center">
                   <h3 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl 3xl:text-6xl 4xl:text-7xl 5xl:text-8xl font-serif font-semibold text-beige">
                     {feature.title}
                   </h3>
                 </div>
-                <div className="min-h-[60px] flex items-start justify-center mb-2 sm:mb-4 lg:mb-5 xl:mb-6 2xl:mb-7 3xl:mb-8 4xl:mb-9 5xl:mb-10">
+                <div className="flex items-start justify-center">
                   <p className="text-base sm:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl 5xl:text-6xl text-beige/80 font-medium">
                     {feature.description}
                   </p>

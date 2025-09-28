@@ -101,12 +101,12 @@ export default function HeroSection() {
     }
   }, [mounted])
   return (
-        <section className="relative min-h-screen flex items-center justify-center bg-black overflow-hidden">
+        <section className="relative min-h-screen flex items-center justify-center bg-black overflow-hidden py-8 sm:py-16">
             {/* Animated Blob Background */}
             <div className="absolute inset-0 w-full h-full overflow-hidden z-10">
               {/* Large Glowing Blobs */}
               <div 
-                className="absolute w-96 h-96 bg-beige/15 rounded-full blur-3xl animate-pulse"
+                className="absolute w-64 h-64 sm:w-96 sm:h-96 bg-beige/15 rounded-full blur-3xl animate-pulse"
                 style={{
                   top: '20%',
                   left: '10%',
@@ -115,7 +115,7 @@ export default function HeroSection() {
                 }}
               />
               <div 
-                className="absolute w-80 h-80 bg-beige/20 rounded-full blur-3xl animate-pulse"
+                className="absolute w-56 h-56 sm:w-80 sm:h-80 bg-beige/20 rounded-full blur-3xl animate-pulse"
                 style={{
                   top: '30%',
                   right: '15%',
@@ -124,7 +124,7 @@ export default function HeroSection() {
                 }}
               />
               <div 
-                className="absolute w-72 h-72 bg-beige/10 rounded-full blur-3xl animate-pulse"
+                className="absolute w-48 h-48 sm:w-72 sm:h-72 bg-beige/10 rounded-full blur-3xl animate-pulse"
                 style={{
                   bottom: '20%',
                   left: '20%',
@@ -133,7 +133,7 @@ export default function HeroSection() {
                 }}
               />
               <div 
-                className="absolute w-88 h-88 bg-beige/25 rounded-full blur-3xl animate-pulse"
+                className="absolute w-60 h-60 sm:w-88 sm:h-88 bg-beige/25 rounded-full blur-3xl animate-pulse"
                 style={{
                   bottom: '30%',
                   right: '10%',
@@ -142,7 +142,7 @@ export default function HeroSection() {
                 }}
               />
               <div 
-                className="absolute w-64 h-64 bg-beige/15 rounded-full blur-3xl animate-pulse"
+                className="absolute w-44 h-44 sm:w-64 sm:h-64 bg-beige/15 rounded-full blur-3xl animate-pulse"
                 style={{
                   top: '50%',
                   left: '50%',
@@ -152,7 +152,7 @@ export default function HeroSection() {
                 }}
               />
               <div 
-                className="absolute w-76 h-76 bg-beige/20 rounded-full blur-3xl animate-pulse"
+                className="absolute w-52 h-52 sm:w-76 sm:h-76 bg-beige/20 rounded-full blur-3xl animate-pulse"
                 style={{
                   top: '10%',
                   left: '60%',
@@ -242,7 +242,7 @@ export default function HeroSection() {
               })}
             </div>
 
-          <div className="relative z-20 max-w-7xl 2xl:max-w-8xl 3xl:max-w-9xl 4xl:max-w-[120rem] 5xl:max-w-[140rem] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 5xl:px-28 text-center pt-16 sm:pt-20 lg:pt-24 xl:pt-28 2xl:pt-32">
+          <div className="relative z-20 max-w-7xl 2xl:max-w-8xl 3xl:max-w-9xl 4xl:max-w-[120rem] 5xl:max-w-[140rem] mx-auto px-3 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 5xl:px-28 text-center pt-20 sm:pt-20 lg:pt-24 xl:pt-28 2xl:pt-32">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -250,7 +250,7 @@ export default function HeroSection() {
         >
           {/* Wordmark */}
           <motion.div 
-            className="mb-8 sm:mb-12 lg:mb-16 xl:mb-20 2xl:mb-24 3xl:mb-28 4xl:mb-32 5xl:mb-36 flex justify-center"
+            className="mb-6 sm:mb-12 lg:mb-16 xl:mb-20 2xl:mb-24 3xl:mb-28 4xl:mb-32 5xl:mb-36 flex justify-center"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.1 }}
@@ -260,7 +260,7 @@ export default function HeroSection() {
           
               {/* Tagline */}
               <motion.h1
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl mb-4 sm:mb-6 lg:mb-8 xl:mb-10 2xl:mb-12 max-w-3xl sm:max-w-4xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl mx-auto leading-tight px-4 font-bold tracking-tight"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl mb-4 sm:mb-6 lg:mb-8 xl:mb-10 2xl:mb-12 max-w-3xl sm:max-w-4xl lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl mx-auto leading-tight px-2 sm:px-4 font-bold tracking-tight"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
@@ -272,7 +272,7 @@ export default function HeroSection() {
 
               {/* Subtitle */}
               <motion.p
-                className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl text-white/80 mb-6 sm:mb-8 lg:mb-10 xl:mb-12 2xl:mb-16 max-w-2xl sm:max-w-3xl lg:max-w-4xl xl:max-w-5xl 2xl:max-w-6xl mx-auto leading-relaxed"
+                className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl text-white/80 mb-6 sm:mb-8 lg:mb-10 xl:mb-12 2xl:mb-16 max-w-2xl sm:max-w-3xl lg:max-w-4xl xl:max-w-5xl 2xl:max-w-6xl mx-auto leading-relaxed px-2 sm:px-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
@@ -282,7 +282,7 @@ export default function HeroSection() {
 
           {/* CTA Buttons */}
           <motion.div
-            className="flex flex-col sm:flex-row gap-4 lg:gap-6 xl:gap-8 2xl:gap-10 3xl:gap-12 4xl:gap-14 5xl:gap-16 justify-center items-center"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 lg:gap-6 xl:gap-8 2xl:gap-10 3xl:gap-12 4xl:gap-14 5xl:gap-16 justify-center items-center px-2 sm:px-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}

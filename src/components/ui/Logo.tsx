@@ -89,15 +89,15 @@ export default function Logo({ size = 'md', className = '', variant = 'text', co
       whileHover={{ scale: size === 'xs' ? 1.05 : 1.02 }}
       transition={{ duration: 0.2 }}
     >
-      <div className={`relative flex items-center justify-center ${constrained ? 'p-2' : 'p-3'}`}>
+      <div className={`relative flex items-center justify-center ${constrained ? 'p-2' : 'p-1 sm:p-3'}`}>
         {/* Subtle animated glowing rounded line */}
         <motion.div
           className="absolute rounded-full border border-beige/30"
           style={{
-            width: constrained ? 'calc(100% + 0.5rem)' : 'calc(100% + 0.75rem)',
-            height: constrained ? 'calc(100% + 0.5rem)' : 'calc(100% + 0.75rem)',
-            top: constrained ? '-0.25rem' : '-0.375rem',
-            left: constrained ? '-0.25rem' : '-0.375rem'
+            width: constrained ? 'calc(100% + 0.5rem)' : 'calc(100% + 0.5rem)',
+            height: constrained ? 'calc(100% + 0.5rem)' : 'calc(100% + 0.5rem)',
+            top: constrained ? '-0.25rem' : '-0.25rem',
+            left: constrained ? '-0.25rem' : '-0.25rem'
           }}
           animate={{
             boxShadow: constrained ? [
@@ -105,9 +105,9 @@ export default function Logo({ size = 'md', className = '', variant = 'text', co
               '0 0 8px rgba(245, 240, 230, 0.3), 0 0 16px rgba(245, 240, 230, 0.15)',
               '0 0 6px rgba(245, 240, 230, 0.2), 0 0 12px rgba(245, 240, 230, 0.1)'
             ] : [
-              '0 0 10px rgba(245, 240, 230, 0.2), 0 0 20px rgba(245, 240, 230, 0.1)',
-              '0 0 15px rgba(245, 240, 230, 0.3), 0 0 25px rgba(245, 240, 230, 0.15)',
-              '0 0 10px rgba(245, 240, 230, 0.2), 0 0 20px rgba(245, 240, 230, 0.1)'
+              '0 0 6px rgba(245, 240, 230, 0.15), 0 0 12px rgba(245, 240, 230, 0.08)',
+              '0 0 8px rgba(245, 240, 230, 0.2), 0 0 16px rgba(245, 240, 230, 0.1)',
+              '0 0 6px rgba(245, 240, 230, 0.15), 0 0 12px rgba(245, 240, 230, 0.08)'
             ],
             opacity: [0.4, 0.6, 0.4]
           }}

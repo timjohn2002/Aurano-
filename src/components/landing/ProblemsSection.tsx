@@ -49,14 +49,14 @@ const problems = [
 
 export default function ProblemsSection() {
   return (
-    <section id="problems" className="py-16 sm:py-20 lg:py-24 xl:py-32 2xl:py-40 bg-black relative">
+    <section id="problems" className="py-8 sm:py-20 lg:py-24 xl:py-32 2xl:py-40 bg-black relative">
       {/* Background Effects */}
       <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-beige/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-green-400/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 sm:w-96 sm:h-96 bg-beige/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 sm:w-96 sm:h-96 bg-beige/5 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+      <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         {/* Header */}
         <motion.div
           className="text-center mb-12 sm:mb-16 lg:mb-20 xl:mb-24"

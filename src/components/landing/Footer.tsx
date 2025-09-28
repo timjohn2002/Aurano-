@@ -5,7 +5,7 @@ import { Instagram } from 'lucide-react'
 
 export default function Footer() {
   return (
-    <footer className="relative bg-black text-beige py-16 px-4 overflow-hidden">
+    <footer className="relative bg-black text-beige py-8 sm:py-16 px-3 sm:px-4 overflow-hidden">
       {/* End-to-end horizontal glow lines */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Top glow line - above content sections */}
@@ -36,7 +36,7 @@ export default function Footer() {
       {/* Background wordmark with grain confined to letter shapes */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <motion.div
-          className="relative text-[12rem] sm:text-[16rem] md:text-[20rem] lg:text-[24rem] xl:text-[28rem] font-black select-none"
+          className="relative text-[8rem] sm:text-[12rem] md:text-[16rem] lg:text-[20rem] xl:text-[24rem] font-black select-none"
           style={{ 
             fontFamily: 'sans-serif',
             fontWeight: '900',

@@ -23,8 +23,8 @@ export default function CTASection() {
   }
 
   return (
-    <section id="waitlist" className="py-16 sm:py-20 lg:py-24 xl:py-32 2xl:py-40 3xl:py-48 4xl:py-56 5xl:py-64 bg-black text-beige">
-      <div className="max-w-4xl 2xl:max-w-6xl 3xl:max-w-7xl 4xl:max-w-8xl 5xl:max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 5xl:px-28 text-center">
+    <section id="waitlist" className="py-8 sm:py-20 lg:py-24 xl:py-32 2xl:py-40 3xl:py-48 4xl:py-56 5xl:py-64 bg-black text-beige">
+      <div className="max-w-4xl 2xl:max-w-6xl 3xl:max-w-7xl 4xl:max-w-8xl 5xl:max-w-9xl mx-auto px-3 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 5xl:px-28 text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}

@@ -28,8 +28,8 @@ export default function Navigation() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-transparent">
-      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 5xl:px-28 py-2">
-        <div className="flex justify-center items-center h-8 sm:h-10 lg:h-12 xl:h-14 2xl:h-16">
+      <div className="w-full px-3 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 3xl:px-20 4xl:px-24 5xl:px-28 py-2">
+        <div className="flex justify-center items-center h-10 sm:h-10 lg:h-12 xl:h-14 2xl:h-16">
           {/* Logo - Left Side */}
           <motion.div
             initial={{ 
@@ -56,7 +56,7 @@ export default function Navigation() {
               mass: 1.2,
               duration: 0.8
             }}
-            className="flex-shrink-0 absolute left-4 sm:left-6 lg:left-8 xl:left-12 2xl:left-16 3xl:left-20 4xl:left-24 5xl:left-28"
+            className="flex-shrink-0 absolute left-3 sm:left-6 lg:left-8 xl:left-12 2xl:left-16 3xl:left-20 4xl:left-24 5xl:left-28"
           >
             <Logo size="sm" variant="text" />
           </motion.div>
@@ -91,9 +91,9 @@ export default function Navigation() {
           <div className="md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-white hover:text-white/80 p-1 sm:p-2"
+              className="text-white hover:text-white/80 p-2"
             >
-              {isMenuOpen ? <X size={18} className="sm:w-5 sm:h-5" /> : <Menu size={18} className="sm:w-5 sm:h-5" />}
+              {isMenuOpen ? <X size={20} className="w-5 h-5" /> : <Menu size={20} className="w-5 h-5" />}
             </button>
           </div>
         </div>
@@ -101,23 +101,23 @@ export default function Navigation() {
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden">
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl px-3 sm:px-4 py-2 sm:py-3 mx-4 sm:mx-6">
-              <div className="space-y-1 sm:space-y-2">
-                <a href="#problems" className="text-white hover:text-white/80 block px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm font-medium">
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl px-4 py-3 mx-3">
+              <div className="space-y-2">
+                <a href="#problems" className="text-white hover:text-white/80 block px-3 py-2 text-sm font-medium">
                   Problems
                 </a>
-                <a href="#features" className="text-white hover:text-white/80 block px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm font-medium">
+                <a href="#features" className="text-white hover:text-white/80 block px-3 py-2 text-sm font-medium">
                   Features
                 </a>
-                <a href="#demo" className="text-white hover:text-white/80 block px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm font-medium">
+                <a href="#demo" className="text-white hover:text-white/80 block px-3 py-2 text-sm font-medium">
                   Demo
                 </a>
-                <a href="#testimonials" className="text-white hover:text-white/80 block px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm font-medium">
+                <a href="#testimonials" className="text-white hover:text-white/80 block px-3 py-2 text-sm font-medium">
                   Testimonials
                 </a>
                 <GlowingButton
                   href="#waitlist"
-                  className="block px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-center"
+                  className="block px-4 py-2 text-sm text-center mt-2"
                 >
                   Join Waitlist
                 </GlowingButton>
