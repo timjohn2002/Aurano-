@@ -59,9 +59,9 @@ export default function Logo({ size = 'md', className = '', variant = 'text', co
             <span 
               className="absolute text-white z-20"
               style={{ 
-                top: '-1.0em',
-                right: '-1.5em',
-                fontSize: '0.15em'
+                top: size === 'lg' ? '-1.2em' : '-1.0em',
+                right: size === 'lg' ? '-1.8em' : '-1.5em',
+                fontSize: size === 'lg' ? '0.12em' : '0.15em'
               }}
             >
               ®
@@ -170,9 +170,9 @@ export default function Logo({ size = 'md', className = '', variant = 'text', co
           <span 
             className="absolute text-white z-20"
             style={{ 
-              top: '-1.0em',
-              right: '-1.5em',
-              fontSize: '0.15em'
+              top: size === 'lg' ? '-1.2em' : '-1.0em',
+              right: size === 'lg' ? '-1.8em' : '-1.5em',
+              fontSize: size === 'lg' ? '0.12em' : '0.15em'
             }}
           >
             ®
