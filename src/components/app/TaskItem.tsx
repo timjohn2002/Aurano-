@@ -6,7 +6,7 @@ import { formatDate } from '@/lib/utils'
 import { useEffect, useState } from 'react'
 
 interface Task {
-  id: number
+  id: string
   title: string
   category: string
   priority: 'low' | 'medium' | 'high'
@@ -17,7 +17,7 @@ interface Task {
 
 interface TaskItemProps {
   task: Task
-  onToggle: (taskId: number) => void
+  onToggle: (taskId: string) => void
 }
 
 const priorityColors = {
