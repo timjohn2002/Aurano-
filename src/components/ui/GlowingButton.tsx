@@ -11,6 +11,7 @@ interface GlowingButtonProps {
   icon?: React.ReactNode
   variant?: 'primary' | 'secondary'
   disabled?: boolean
+  type?: 'button' | 'submit' | 'reset'
 }
 
 export default function GlowingButton({ 
@@ -18,9 +19,10 @@ export default function GlowingButton({
   href, 
   onClick, 
   className = '', 
-  icon,
+  icon, 
   variant = 'primary',
-  disabled = false
+  disabled = false,
+  type = 'button'
 }: GlowingButtonProps) {
   const baseClasses = `relative inline-flex items-center gap-3 px-6 py-3 rounded-full font-medium transition-all duration-300 ${disabled ? 'opacity-50 cursor-not-allowed' : ''} shadow-lg group overflow-hidden ${!disabled ? 'hover:animate-spark-border' : ''}`
   
@@ -51,6 +53,7 @@ export default function GlowingButton({
 
   return (
     <button 
+      type={type}
       onClick={onClick}
       disabled={disabled}
       className={`${baseClasses} ${variantClasses[variant]} ${className}`}
