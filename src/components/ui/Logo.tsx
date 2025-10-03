@@ -43,7 +43,7 @@ export default function Logo({ size = 'md', className = '', variant = 'text', co
   if (!isClient) {
     return (
       <div className={`${className}`}>
-        <div className="relative flex items-center justify-center p-2 sm:p-3">
+        <div className="relative flex items-center justify-center p-1 sm:p-3">
           <div className="relative flex items-baseline z-10">
             <span 
               className={`text-white font-bold ${textSizes[size]} tracking-tight`}
@@ -128,7 +128,7 @@ export default function Logo({ size = 'md', className = '', variant = 'text', co
       whileHover={{ scale: size === 'xs' ? 1.05 : 1.02 }}
       transition={{ duration: 0.2 }}
     >
-      <div className={`relative flex items-center justify-center p-2 sm:p-3`} style={{ transform: 'translateY(0em)' }}>
+      <div className={`relative flex items-center justify-center p-1 sm:p-3`} style={{ transform: 'translateY(0.1em)' }}>
         {/* Subtle animated glowing rounded line */}
         <motion.div
           className="absolute rounded-full border border-beige/30"
