@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Play, Pause, RotateCcw, X, Settings, Volume2, VolumeX } from 'lucide-react'
+import AppNavigation from './AppNavigation'
 
 type TimerState = 'idle' | 'running' | 'paused' | 'completed'
 
@@ -147,7 +148,11 @@ export default function FocusMode() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-beige flex items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen bg-black text-beige">
+      {/* Header */}
+      <AppNavigation currentPage="focus" />
+      
+      <div className="flex items-center justify-center relative overflow-hidden min-h-[calc(100vh-4rem)]">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-20 left-20 w-32 h-32 border border-beige rounded-full" />
@@ -438,6 +443,7 @@ export default function FocusMode() {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </div>
   )
 }

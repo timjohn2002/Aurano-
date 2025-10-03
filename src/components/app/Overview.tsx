@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Calendar, List, Filter, Search, ChevronDown } from 'lucide-react'
 import TaskItem from './TaskItem'
 import Logo from '@/components/ui/Logo'
+import AppNavigation from './AppNavigation'
 import { useUser } from '@/contexts/UserContext'
 import { useUserData } from '@/hooks/useUserData'
 
@@ -62,22 +63,7 @@ export default function Overview() {
   return (
     <div className="min-h-screen bg-black text-beige">
       {/* Header */}
-      <header className="bg-black border-b border-beige/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-6">
-                <Logo size="sm" variant="text" />
-                <div className="hidden md:flex items-center gap-6">
-                  <a href="/app" className="text-beige/60 hover:text-beige">Dashboard</a>
-                  <a href="/app/overview" className="text-beige font-medium">Overview</a>
-                  <a href="/app/focus" className="text-beige/60 hover:text-beige">Focus</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <AppNavigation currentPage="overview" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
