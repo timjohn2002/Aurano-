@@ -101,7 +101,7 @@ export default function HeroSection() {
     }
   }, [mounted])
   return (
-        <section className="relative min-h-screen flex items-center justify-center bg-black overflow-hidden py-8 sm:py-16">
+        <section className="relative min-h-screen flex items-center justify-center bg-black overflow-hidden pt-2 pb-0 sm:py-16 sm:pb-16">
             {/* Animated Blob Background */}
             <div className="absolute inset-0 w-full h-full overflow-hidden z-10">
               {/* Large Glowing Blobs */}

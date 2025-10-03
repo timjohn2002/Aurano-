@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/ui/CustomCursor";
+import { UserProvider } from "@/contexts/UserContext";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -47,8 +48,10 @@ export default function RootLayout({
       <body
         className={`${inter.variable} antialiased`}
       >
-        <CustomCursor />
-        {children}
+        <UserProvider>
+          <CustomCursor />
+          {children}
+        </UserProvider>
       </body>
     </html>
   );

@@ -52,9 +52,27 @@ export default function FocusMode() {
   const handleTimerComplete = () => {
     setTimerState('completed')
     if (isSoundEnabled) {
-      // Play completion sound
-      const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT')
-      audio.play()
+      // Play completion sound using Web Audio API
+      try {
+        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+        const oscillator = audioContext.createOscillator()
+        const gainNode = audioContext.createGain()
+        
+        oscillator.connect(gainNode)
+        gainNode.connect(audioContext.destination)
+        
+        oscillator.frequency.setValueAtTime(800, audioContext.currentTime)
+        oscillator.frequency.setValueAtTime(600, audioContext.currentTime + 0.1)
+        oscillator.frequency.setValueAtTime(800, audioContext.currentTime + 0.2)
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime)
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5)
+        
+        oscillator.start(audioContext.currentTime)
+        oscillator.stop(audioContext.currentTime + 0.5)
+      } catch (error) {
+        console.log('Audio not supported or blocked by browser')
+      }
     }
   }
 
@@ -77,17 +95,32 @@ export default function FocusMode() {
   const nextSession = () => {
     if (currentSession === 'work') {
       setSessionsCompleted(prev => prev + 1)
-      if (sessionsCompleted + 1 >= 4) {
-        setCurrentSession('longBreak')
-        setTimeLeft(LONG_BREAK)
+      
+      // If break duration is 0, skip break and go directly to next work session
+      if (breakDuration === 0) {
+        setCurrentSession('work')
+        setTimeLeft(workDuration)
       } else {
-        setCurrentSession('shortBreak')
-        setTimeLeft(breakDuration)
+        // Normal break logic
+        if (sessionsCompleted + 1 >= 4) {
+          setCurrentSession('longBreak')
+          setTimeLeft(LONG_BREAK)
+        } else {
+          setCurrentSession('shortBreak')
+          setTimeLeft(breakDuration)
+        }
       }
     } else {
       setCurrentSession('work')
       setTimeLeft(workDuration)
     }
+    setTimerState('idle')
+  }
+
+  const skipBreak = () => {
+    // Skip break and go directly to next work session
+    setCurrentSession('work')
+    setTimeLeft(workDuration)
     setTimerState('idle')
   }
 
@@ -260,14 +293,27 @@ export default function FocusMode() {
             )}
 
             {timerState === 'completed' && (
-              <motion.button
-                onClick={nextSession}
-                className="px-8 py-4 bg-beige text-black rounded-full font-semibold hover:bg-beige/80 transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Next Session
-              </motion.button>
+              <div className="flex gap-4">
+                <motion.button
+                  onClick={nextSession}
+                  className="px-8 py-4 bg-beige text-black rounded-full font-semibold hover:bg-beige/80 transition-colors"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Next Session
+                </motion.button>
+                
+                {(currentSession === 'shortBreak' || currentSession === 'longBreak') && (
+                  <motion.button
+                    onClick={skipBreak}
+                    className="px-8 py-4 border border-beige/50 text-beige rounded-full font-semibold hover:bg-beige/10 transition-colors"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Skip Break
+                  </motion.button>
+                )}
+              </div>
             )}
           </div>
 
@@ -367,9 +413,14 @@ export default function FocusMode() {
                       const workValue = parseInt(customWorkDuration)
                       const breakValue = parseInt(customBreakDuration)
                       
-                      if (workValue >= 1 && workValue <= 60 && breakValue >= 1 && breakValue <= 30) {
+                      // Allow starting with just work duration, or both work and break
+                      const isWorkValid = workValue >= 1 && workValue <= 60
+                      const isBreakValid = breakValue >= 0 && breakValue <= 30
+                      const isBreakEmpty = customBreakDuration === '' || isNaN(breakValue)
+                      
+                      if (isWorkValid && (isBreakValid || isBreakEmpty)) {
                         const workSeconds = workValue * 60
-                        const breakSeconds = breakValue * 60
+                        const breakSeconds = isBreakValid ? breakValue * 60 : 0 // Use 0 if no break time entered
                         
                         setWorkDuration(workSeconds) // Convert minutes to seconds
                         setBreakDuration(breakSeconds) // Convert minutes to seconds

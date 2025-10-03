@@ -37,8 +37,8 @@ export default function TimeClaimedSection() {
           >
             <span className="bg-gradient-to-r from-beige via-beige/80 to-beige/60 bg-clip-text text-transparent">
               Average time saved thanks to{' '}
-              <span className="inline-block hover:scale-105 transition-transform duration-200">
-                <Logo size="lg" variant="text" className="inline" trademarkSize="xxs" />
+              <span className="inline-block">
+                <Logo size="lg" variant="text" />
               </span>
             </span>
           </motion.h2>

@@ -34,7 +34,7 @@ export default function Footer() {
       </div>
 
       {/* Background wordmark with grain confined to letter shapes */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <div className="absolute inset-0 flex items-end justify-center pointer-events-none pb-0 sm:items-center sm:pb-0">
         <motion.div
           className="relative text-[8rem] sm:text-[12rem] md:text-[16rem] lg:text-[20rem] xl:text-[24rem] font-black select-none"
           style={{ 
@@ -43,7 +43,9 @@ export default function Footer() {
             letterSpacing: '-0.02em',
             width: '100%',
             textAlign: 'center',
-            position: 'relative'
+            position: 'relative',
+            bottom: '0',
+            marginBottom: '0'
           }}
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -154,7 +156,9 @@ export default function Footer() {
 
             {/* Instagram Icon */}
             <motion.a
-              href="#"
+              href="https://www.instagram.com/danemcbeth/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}

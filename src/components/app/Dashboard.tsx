@@ -1,71 +1,103 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Mic, Target, TrendingUp, CheckCircle } from 'lucide-react'
 import VoiceInputModal from './VoiceInputModal'
 import CategoryWidget from './CategoryWidget'
 import TaskItem from './TaskItem'
 import Logo from '@/components/ui/Logo'
+import { useUser } from '@/contexts/UserContext'
+import { useUserData } from '@/hooks/useUserData'
 
-const mockTasks = [
-  {
-    id: 1,
-    title: "Finish quarterly report",
-    category: "Work",
-        priority: "high" as const,
-    dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-    completed: false,
-    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000)
-  },
-  {
-    id: 2,
-    title: "Go to gym",
-    category: "Health",
-        priority: "medium" as const,
-    dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-    completed: false,
-    createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000)
-  },
-  {
-    id: 3,
-    title: "Read 30 pages",
-    category: "Learning",
-        priority: "low" as const,
-    dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-    completed: true,
-    createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000)
-  },
-  {
-    id: 4,
-    title: "Call mom",
-    category: "Personal",
-        priority: "medium" as const,
-    dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-    completed: false,
-    createdAt: new Date(Date.now() - 30 * 60 * 1000)
-  }
-]
+// No mock data - using user-specific data from useUserData hook
 
-const categories = [
-  { name: "Work", count: 12, color: "bg-blue-100 text-blue-800" },
-  { name: "Health", count: 8, color: "bg-green-100 text-green-800" },
-  { name: "Personal", count: 5, color: "bg-purple-100 text-purple-800" },
-  { name: "Learning", count: 3, color: "bg-orange-100 text-orange-800" }
-]
+  const defaultCategories = [
+    { name: "Work", count: 0, color: "bg-blue-100 text-blue-800", isDefault: true },
+    { name: "Health", count: 0, color: "bg-red-100 text-red-800", isDefault: true },
+    { name: "Personal", count: 0, color: "bg-purple-100 text-purple-800", isDefault: true },
+    { name: "Learning", count: 0, color: "bg-green-100 text-green-800", isDefault: true },
+    { name: "Other", count: 0, color: "bg-gray-100 text-gray-800", isDefault: true }
+  ]
 
 export default function Dashboard() {
-  const [tasks, setTasks] = useState(mockTasks)
   const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false)
+  const [userCategories, setUserCategories] = useState(defaultCategories)
+  const { user } = useUser()
+  const { userData, addTask, completeTask, getProductivityMetrics, isLoading } = useUserData()
 
-  const upcomingTasks = tasks.filter(task => !task.completed).slice(0, 5)
-  const completedToday = tasks.filter(task => task.completed).length
-  const productivityScore = Math.round((completedToday / tasks.length) * 100)
+  // Sync category counts with actual tasks
+  useEffect(() => {
+    if (userData.tasks) {
+      const categoryCounts = userData.tasks.reduce((acc, task) => {
+        acc[task.category] = (acc[task.category] || 0) + 1
+        return acc
+      }, {} as Record<string, number>)
+      
+      setUserCategories(prev => 
+        prev.map(cat => ({
+          ...cat,
+          count: categoryCounts[cat.name] || 0
+        }))
+      )
+    }
+  }, [userData.tasks])
 
-  const toggleTask = (taskId: number) => {
-    setTasks(tasks.map(task => 
-      task.id === taskId ? { ...task, completed: !task.completed } : task
-    ))
+  // Function to get greeting based on current time
+  const getGreeting = () => {
+    const hour = new Date().getHours()
+    if (hour < 12) return 'Good morning'
+    if (hour < 18) return 'Good afternoon'
+    return 'Good evening'
+  }
+
+  // Function to format time ago
+  const getTimeAgo = (timestamp: string) => {
+    const now = new Date()
+    const activityTime = new Date(timestamp)
+    const diffInMinutes = Math.floor((now.getTime() - activityTime.getTime()) / (1000 * 60))
+    
+    if (diffInMinutes < 1) return 'Just now'
+    if (diffInMinutes < 60) return `${diffInMinutes}m ago`
+    
+    const diffInHours = Math.floor(diffInMinutes / 60)
+    if (diffInHours < 24) return `${diffInHours}h ago`
+    
+    const diffInDays = Math.floor(diffInHours / 24)
+    return `${diffInDays}d ago`
+  }
+
+  const upcomingTasks = userData.tasks.filter(task => !task.completed).slice(0, 5)
+  const metrics = getProductivityMetrics()
+
+  const handleToggleTask = (taskId: string) => {
+    const task = userData.tasks.find(t => t.id === taskId)
+    completeTask(taskId)
+    
+    // Update category count when task is completed
+    if (task) {
+      setUserCategories(prev => 
+        prev.map(cat => 
+          cat.name === task.category 
+            ? { ...cat, count: Math.max(0, cat.count - 1) }
+            : cat
+        )
+      )
+    }
+  }
+
+  const handleAddTask = (title: string, category: string, dueDate?: string) => {
+    console.log('Dashboard: Adding task with dueDate:', dueDate)
+    addTask({
+      title,
+      category,
+      description: '',
+      dueDate
+    })
+  }
+
+  const handleDeleteCategory = (categoryName: string) => {
+    setUserCategories(prev => prev.filter(cat => cat.name !== categoryName))
   }
 
   return (
@@ -107,10 +139,13 @@ export default function Dashboard() {
               transition={{ duration: 0.5 }}
             >
               <h2 className="text-3xl font-serif font-bold text-beige mb-2">
-                Good morning! 👋
+                {getGreeting()}, {user?.name || 'Beta Tester'}! 👋
               </h2>
               <p className="text-beige/60">
-                You have {upcomingTasks.length} tasks to complete today
+                {upcomingTasks.length === 0 
+                  ? "You have no tasks yet. Add your first task to get started!" 
+                  : `You have ${upcomingTasks.length} tasks to complete today`
+                }
               </p>
             </motion.div>
 
@@ -129,16 +164,42 @@ export default function Dashboard() {
                 </div>
                 
                 <div className="space-y-3">
-                  {upcomingTasks.map((task, index) => (
-                    <motion.div
-                      key={task.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.1 }}
-                    >
-                      <TaskItem task={task} onToggle={toggleTask} />
-                    </motion.div>
-                  ))}
+                  {upcomingTasks.length === 0 ? (
+                    <div className="text-center py-8">
+                      <div className="text-beige/40 mb-4">
+                        <Target size={48} className="mx-auto" />
+                      </div>
+                      <p className="text-beige/60 mb-4">No tasks yet</p>
+                      <button
+                        onClick={() => setIsVoiceModalOpen(true)}
+                        className="text-beige hover:text-beige/80 text-sm underline"
+                      >
+                        Add your first task
+                      </button>
+                    </div>
+                  ) : (
+                    upcomingTasks.map((task, index) => (
+                      <motion.div
+                        key={`${task.id}_${index}`}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.1 }}
+                      >
+                        <TaskItem 
+                          task={{
+                            id: task.id,
+                            title: task.title,
+                            category: task.category,
+                            priority: 'medium' as const,
+                            dueDate: task.dueDate ? new Date(task.dueDate) : new Date(),
+                            completed: task.completed,
+                            createdAt: new Date(task.createdAt)
+                          }} 
+                          onToggle={() => handleToggleTask(task.id)} 
+                        />
+                      </motion.div>
+                    ))
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -177,6 +238,48 @@ export default function Dashboard() {
                       <div className="text-sm text-beige/60">Start Pomodoro</div>
                     </div>
                   </a>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Tips Block */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <div className="bg-black border border-beige/20 rounded-2xl p-6">
+                <h3 className="text-lg font-serif font-semibold text-beige mb-4">Quick Tips</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-beige/5 border border-beige/10">
+                    <div className="w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-blue-400 text-sm font-bold">1</span>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-beige text-sm mb-1">Voice Input</h4>
+                      <p className="text-xs text-beige/70">Use voice commands to quickly add tasks while multitasking</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-beige/5 border border-beige/10">
+                    <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-green-400 text-sm font-bold">2</span>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-beige text-sm mb-1">Focus Mode</h4>
+                      <p className="text-xs text-beige/70">Set work intervals to maintain concentration and productivity</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3 p-3 rounded-lg bg-beige/5 border border-beige/10">
+                    <div className="w-8 h-8 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-purple-400 text-sm font-bold">3</span>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-beige text-sm mb-1">Categories</h4>
+                      <p className="text-xs text-beige/70">Organize tasks by type to track progress across different areas</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -231,9 +334,9 @@ export default function Dashboard() {
                     damping: 15,
                     delay: 0.3
                   }}
-                  key={productivityScore}
+                  key={metrics.productivityScore}
                 >
-                  {productivityScore}%
+                  {metrics.productivityScore}%
                 </motion.div>
                 
                 <motion.div 
@@ -242,7 +345,7 @@ export default function Dashboard() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.4 }}
                 >
-                  {completedToday} tasks completed today
+                  {metrics.totalTasksCompleted} tasks completed
                 </motion.div>
                 
                 {/* Animated progress ring */}
@@ -269,7 +372,7 @@ export default function Dashboard() {
                       strokeLinecap="round"
                       fill="none"
                       initial={{ pathLength: 0 }}
-                      animate={{ pathLength: productivityScore / 100 }}
+                      animate={{ pathLength: metrics.productivityScore / 100 }}
                       transition={{ duration: 1.5, delay: 0.6, ease: "easeInOut" }}
                       d="M18 2.0845
                         a 15.9155 15.9155 0 0 1 0 31.831
@@ -289,16 +392,62 @@ export default function Dashboard() {
               <div className="bg-black border border-beige/20 rounded-2xl p-6">
                 <h3 className="text-lg font-serif font-semibold text-beige mb-4">Categories</h3>
                 <div className="space-y-3">
-                  {categories.map((category, index) => (
-                    <motion.div
-                      key={category.name}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: 0.3 + index * 0.1 }}
-                    >
-                      <CategoryWidget category={category} />
-                    </motion.div>
-                  ))}
+                  {userCategories && userCategories.length > 0 ? (
+                    userCategories.map((category, index) => (
+                      <div
+                        key={category.name}
+                        style={{
+                          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                          border: '1px solid rgba(255, 255, 255, 0.2)',
+                          padding: '12px',
+                          margin: '5px 0',
+                          borderRadius: '8px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div 
+                            style={{
+                              width: '12px',
+                              height: '12px',
+                              borderRadius: '50%',
+                              backgroundColor: category.name === 'Work' ? '#93c5fd' : 
+                                              category.name === 'Health' ? '#fca5a5' : 
+                                              category.name === 'Personal' ? '#c4b5fd' : 
+                                              category.name === 'Learning' ? '#86efac' : '#d1d5db'
+                            }}
+                          />
+                          <span style={{ color: 'white', fontWeight: '500', fontSize: '16px' }}>{category.name}</span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{ color: 'white', fontSize: '14px', fontWeight: 'bold' }}>{category.count}</span>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleDeleteCategory(category.name)
+                            }}
+                            style={{
+                              backgroundColor: 'transparent',
+                              border: 'none',
+                              color: '#ef4444',
+                              padding: '4px',
+                              borderRadius: '4px',
+                              cursor: 'pointer'
+                            }}
+                            title="Delete category"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div style={{ backgroundColor: 'red', color: 'white', padding: '10px' }}>
+                      No categories available
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -326,95 +475,56 @@ export default function Dashboard() {
                       Recent Activity
                     </motion.h3>
                     <div className="space-y-3">
-                      <motion.div 
-                        className="flex items-center gap-3 text-sm p-2 rounded-lg hover:bg-beige/5 transition-colors"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.4, delay: 0.5 }}
-                        whileHover={{ x: 5, scale: 1.02 }}
-                      >
-                        <motion.div
-                          initial={{ scale: 0, rotate: -180 }}
-                          animate={{ scale: 1, rotate: 0 }}
-                          transition={{ 
-                            type: "spring",
-                            stiffness: 200,
-                            damping: 15,
-                            delay: 0.6
-                          }}
+                      {userData.activities.length === 0 ? (
+                        <motion.div 
+                          className="text-center py-8"
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.4, delay: 0.5 }}
                         >
-                          <CheckCircle size={16} className="text-green-400" />
+                          <div className="text-beige/40 mb-4">
+                            <Target size={48} className="mx-auto" />
+                          </div>
+                          <p className="text-beige/60 mb-4">No recent activity</p>
+                          <p className="text-beige/40 text-sm">Start by adding your first task to see activity here</p>
                         </motion.div>
-                        <span className="text-beige/80">Completed &quot;Read 30 pages&quot;</span>
-                        <motion.span 
-                          className="text-beige/40 ml-auto"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ duration: 0.3, delay: 0.8 }}
-                        >
-                          2h ago
-                        </motion.span>
-                      </motion.div>
-                      
-                      <motion.div 
-                        className="flex items-center gap-3 text-sm p-2 rounded-lg hover:bg-beige/5 transition-colors"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.4, delay: 0.7 }}
-                        whileHover={{ x: 5, scale: 1.02 }}
-                      >
-                        <motion.div
-                          initial={{ scale: 0, rotate: -180 }}
-                          animate={{ scale: 1, rotate: 0 }}
-                          transition={{ 
-                            type: "spring",
-                            stiffness: 200,
-                            damping: 15,
-                            delay: 0.8
-                          }}
-                        >
-                          <Mic size={16} className="text-beige/60" />
-                        </motion.div>
-                        <span className="text-beige/80">Added &quot;Call mom&quot;</span>
-                        <motion.span 
-                          className="text-beige/40 ml-auto"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ duration: 0.3, delay: 1.0 }}
-                        >
-                          30m ago
-                        </motion.span>
-                      </motion.div>
-                      
-                      <motion.div 
-                        className="flex items-center gap-3 text-sm p-2 rounded-lg hover:bg-beige/5 transition-colors"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.4, delay: 0.9 }}
-                        whileHover={{ x: 5, scale: 1.02 }}
-                      >
-                        <motion.div
-                          initial={{ scale: 0, rotate: -180 }}
-                          animate={{ scale: 1, rotate: 0 }}
-                          transition={{ 
-                            type: "spring",
-                            stiffness: 200,
-                            damping: 15,
-                            delay: 1.0
-                          }}
-                        >
-                          <Target size={16} className="text-beige/60" />
-                        </motion.div>
-                        <span className="text-beige/80">Started focus session</span>
-                        <motion.span 
-                          className="text-beige/40 ml-auto"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ duration: 0.3, delay: 1.2 }}
-                        >
-                          1h ago
-                        </motion.span>
-                      </motion.div>
+                      ) : (
+                        userData.activities.slice(0, 5).map((activity, index) => (
+                          <motion.div 
+                            key={activity.id}
+                            className="flex items-center gap-3 text-sm p-2 rounded-lg hover:bg-beige/5 transition-colors"
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.4, delay: 0.5 + (index * 0.1) }}
+                            whileHover={{ x: 5, scale: 1.02 }}
+                          >
+                            <motion.div
+                              initial={{ scale: 0, rotate: -180 }}
+                              animate={{ scale: 1, rotate: 0 }}
+                              transition={{ 
+                                type: "spring",
+                                stiffness: 200,
+                                damping: 15,
+                                delay: 0.6 + (index * 0.1)
+                              }}
+                            >
+                              {activity.type === 'task_completed' && <CheckCircle size={16} className="text-green-400" />}
+                              {activity.type === 'task_added' && <Mic size={16} className="text-beige/60" />}
+                              {activity.type === 'focus_session_started' && <Target size={16} className="text-beige/60" />}
+                              {activity.type === 'focus_session_completed' && <CheckCircle size={16} className="text-blue-400" />}
+                            </motion.div>
+                            <span className="text-beige/80">{activity.title}</span>
+                            <motion.span 
+                              className="text-beige/40 ml-auto"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              transition={{ duration: 0.3, delay: 0.8 + (index * 0.1) }}
+                            >
+                              {getTimeAgo(activity.timestamp)}
+                            </motion.span>
+                          </motion.div>
+                        ))
+                      )}
                     </div>
                   </motion.div>
                 </motion.div>
@@ -426,10 +536,7 @@ export default function Dashboard() {
       <VoiceInputModal
         isOpen={isVoiceModalOpen}
         onClose={() => setIsVoiceModalOpen(false)}
-        onTaskAdded={(newTask) => {
-          setTasks([newTask, ...tasks])
-          setIsVoiceModalOpen(false)
-        }}
+        onTaskAdded={handleAddTask}
       />
     </div>
   )

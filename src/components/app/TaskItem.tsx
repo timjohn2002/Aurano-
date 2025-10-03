@@ -27,9 +27,9 @@ const priorityColors = {
 }
 
 const priorityIcons = {
-  low: <Flag size={12} className="text-gray-500" />,
-  medium: <Flag size={12} className="text-yellow-600" />,
-  high: <Flag size={12} className="text-red-600" />
+  low: <Flag size={12} className="text-gray-500 w-3 h-3" />,
+  medium: <Flag size={12} className="text-yellow-600 w-3 h-3" />,
+  high: <Flag size={12} className="text-red-600 w-3 h-3" />
 }
 
 export default function TaskItem({ task, onToggle }: TaskItemProps) {
@@ -64,11 +64,13 @@ export default function TaskItem({ task, onToggle }: TaskItemProps) {
       </button>
 
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1">
-          <span className={`font-medium text-beige ${task.completed ? 'line-through' : ''}`}>
+        <div className="flex items-start gap-2 mb-1 relative">
+          <span className={`font-medium text-beige flex-1 pr-6 ${task.completed ? 'line-through' : ''}`}>
             {task.title}
           </span>
-          {priorityIcons[task.priority]}
+          <div className="absolute top-0 right-0 w-3 h-3 flex items-center justify-center">
+            {priorityIcons[task.priority]}
+          </div>
         </div>
         
         <div className="flex items-center gap-4 text-sm text-beige/60">

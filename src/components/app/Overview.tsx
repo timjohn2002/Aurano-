@@ -5,87 +5,55 @@ import { motion } from 'framer-motion'
 import { Calendar, List, Filter, Search, ChevronDown } from 'lucide-react'
 import TaskItem from './TaskItem'
 import Logo from '@/components/ui/Logo'
-
-const mockTasks = [
-  {
-    id: 1,
-    title: "Finish quarterly report",
-    category: "Work",
-    priority: "high" as const,
-    dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-    completed: false,
-    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000)
-  },
-  {
-    id: 2,
-    title: "Go to gym",
-    category: "Health",
-    priority: "medium" as const,
-    dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-    completed: false,
-    createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000)
-  },
-  {
-    id: 3,
-    title: "Read 30 pages",
-    category: "Learning",
-    priority: "low" as const,
-    dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-    completed: true,
-    createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000)
-  },
-  {
-    id: 4,
-    title: "Call mom",
-    category: "Personal",
-    priority: "medium" as const,
-    dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-    completed: false,
-    createdAt: new Date(Date.now() - 30 * 60 * 1000)
-  },
-  {
-    id: 5,
-    title: "Buy groceries",
-    category: "Personal",
-    priority: "low" as const,
-    dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-    completed: false,
-    createdAt: new Date(Date.now() - 15 * 60 * 1000)
-  },
-  {
-    id: 6,
-    title: "Review code changes",
-    category: "Work",
-    priority: "high" as const,
-    dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-    completed: false,
-    createdAt: new Date(Date.now() - 45 * 60 * 1000)
-  }
-]
+import { useUser } from '@/contexts/UserContext'
+import { useUserData } from '@/hooks/useUserData'
 
 const categories = ['All', 'Work', 'Health', 'Personal', 'Learning']
 const priorities = ['All', 'High', 'Medium', 'Low']
 
 export default function Overview() {
-  const [tasks, setTasks] = useState(mockTasks)
+  const { user } = useUser()
+  const { userData, completeTask, isLoading, getProductivityMetrics } = useUserData()
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list')
   const [selectedCategory, setSelectedCategory] = useState('All')
   const [selectedPriority, setSelectedPriority] = useState('All')
   const [searchQuery, setSearchQuery] = useState('')
   const [showFilters, setShowFilters] = useState(false)
 
-  const toggleTask = (taskId: number) => {
-    setTasks(tasks.map(task => 
-      task.id === taskId ? { ...task, completed: !task.completed } : task
-    ))
+  // Show loading state if user data is still loading
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black text-beige">
+        <p>Loading overview...</p>
+      </div>
+    )
+  }
+
+  // If no user is logged in, redirect to login or show a message
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black text-beige">
+        <div className="text-center">
+          <p className="text-xl mb-4">Please log in to view your tasks</p>
+          <a href="/" className="text-beige hover:text-beige/80 underline">
+            Go to homepage
+          </a>
+        </div>
+      </div>
+    )
+  }
+
+  const tasks = userData.tasks
+
+  const toggleTask = (taskId: string) => {
+    completeTask(taskId)
   }
 
   const filteredTasks = tasks.filter(task => {
     const matchesCategory = selectedCategory === 'All' || task.category === selectedCategory
-    const matchesPriority = selectedPriority === 'All' || task.priority === selectedPriority.toLowerCase()
     const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase())
     
-    return matchesCategory && matchesPriority && matchesSearch
+    return matchesCategory && matchesSearch
   })
 
   const completedTasks = filteredTasks.filter(task => task.completed)
@@ -328,7 +296,18 @@ export default function Overview() {
                         whileHover={{ x: 5, scale: 1.01 }}
                         layout
                       >
-                        <TaskItem task={task} onToggle={toggleTask} />
+                        <TaskItem 
+                          task={{
+                            id: task.id,
+                            title: task.title,
+                            category: task.category,
+                            priority: 'medium' as const,
+                            dueDate: task.dueDate ? new Date(task.dueDate) : new Date(),
+                            completed: task.completed,
+                            createdAt: new Date(task.createdAt)
+                          }} 
+                          onToggle={() => toggleTask(task.id)} 
+                        />
                       </motion.div>
                     ))}
                   </div>
@@ -371,7 +350,18 @@ export default function Overview() {
                         whileHover={{ x: 5, scale: 1.01 }}
                         layout
                       >
-                        <TaskItem task={task} onToggle={toggleTask} />
+                        <TaskItem 
+                          task={{
+                            id: task.id,
+                            title: task.title,
+                            category: task.category,
+                            priority: 'medium' as const,
+                            dueDate: task.dueDate ? new Date(task.dueDate) : new Date(),
+                            completed: task.completed,
+                            createdAt: new Date(task.createdAt)
+                          }} 
+                          onToggle={() => toggleTask(task.id)} 
+                        />
                       </motion.div>
                     ))}
                   </div>

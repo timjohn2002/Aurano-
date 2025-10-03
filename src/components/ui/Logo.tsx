@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 
 interface LogoProps {
   size?: 'xs' | 'sm' | 'md' | 'lg'
@@ -11,6 +12,12 @@ interface LogoProps {
 }
 
 export default function Logo({ size = 'md', className = '', variant = 'text', constrained = false, trademarkSize }: LogoProps) {
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
   const sizeClasses = {
     xs: 'h-6',
     sm: 'h-8',
@@ -27,10 +34,42 @@ export default function Logo({ size = 'md', className = '', variant = 'text', co
 
   const trademarkSizes = {
     xxs: 'text-xs',
-    xs: 'text-xs',
-    sm: 'text-xs',
-    md: 'text-xs',
-    lg: 'text-xs'
+    xs: 'text-sm',
+    sm: 'text-base',
+    md: 'text-lg',
+    lg: 'text-xl'
+  }
+
+  if (!isClient) {
+    return (
+      <div className={`${className}`}>
+        <div className="relative flex items-center justify-center p-2 sm:p-3">
+          <div className="relative flex items-baseline z-10">
+            <span 
+              className={`text-white font-bold ${textSizes[size]} tracking-tight`}
+              style={{ 
+                fontFamily: 'sans-serif',
+                fontWeight: '700',
+                letterSpacing: '-0.02em',
+                lineHeight: '1'
+              }}
+            >
+              aurano
+            </span>
+            <span 
+              className="absolute text-white z-20"
+              style={{ 
+                top: '-1.0em',
+                right: '-1.5em',
+                fontSize: '0.15em'
+              }}
+            >
+              ®
+            </span>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   if (variant === 'icon') {
@@ -89,25 +128,21 @@ export default function Logo({ size = 'md', className = '', variant = 'text', co
       whileHover={{ scale: size === 'xs' ? 1.05 : 1.02 }}
       transition={{ duration: 0.2 }}
     >
-      <div className={`relative flex items-center justify-center ${constrained ? 'p-2' : 'p-1 sm:p-3'}`}>
+      <div className={`relative flex items-center justify-center p-2 sm:p-3`} style={{ transform: 'translateY(0em)' }}>
         {/* Subtle animated glowing rounded line */}
         <motion.div
           className="absolute rounded-full border border-beige/30"
           style={{
-            width: constrained ? 'calc(100% + 0.5rem)' : 'calc(100% + 0.5rem)',
-            height: constrained ? 'calc(100% + 0.5rem)' : 'calc(100% + 0.5rem)',
-            top: constrained ? '-0.25rem' : '-0.25rem',
-            left: constrained ? '-0.25rem' : '-0.25rem'
+            width: 'calc(100% + 0.5rem)',
+            height: 'calc(100% + 0.5rem)',
+            top: '-0.25rem',
+            left: '-0.25rem'
           }}
           animate={{
-            boxShadow: constrained ? [
+            boxShadow: [
               '0 0 6px rgba(245, 240, 230, 0.2), 0 0 12px rgba(245, 240, 230, 0.1)',
               '0 0 8px rgba(245, 240, 230, 0.3), 0 0 16px rgba(245, 240, 230, 0.15)',
               '0 0 6px rgba(245, 240, 230, 0.2), 0 0 12px rgba(245, 240, 230, 0.1)'
-            ] : [
-              '0 0 6px rgba(245, 240, 230, 0.15), 0 0 12px rgba(245, 240, 230, 0.08)',
-              '0 0 8px rgba(245, 240, 230, 0.2), 0 0 16px rgba(245, 240, 230, 0.1)',
-              '0 0 6px rgba(245, 240, 230, 0.15), 0 0 12px rgba(245, 240, 230, 0.08)'
             ],
             opacity: [0.4, 0.6, 0.4]
           }}
@@ -119,25 +154,25 @@ export default function Logo({ size = 'md', className = '', variant = 'text', co
         />
         
         {/* Text logo */}
-        <div className="relative flex items-center z-10">
+        <div className="relative flex items-baseline z-10">
           <span 
             className={`text-white font-bold ${textSizes[size]} tracking-tight`}
             style={{ 
               fontFamily: 'sans-serif',
               fontWeight: '700',
-              letterSpacing: '-0.02em'
+              letterSpacing: '-0.02em',
+              lineHeight: '1'
             }}
           >
             aurano
           </span>
           {/* Trademark symbol - positioned in upper right corner of 'o' */}
           <span 
-            className={`absolute text-white z-20 ${trademarkSizes[trademarkSize || size]}`}
+            className="absolute text-white z-20"
             style={{ 
-              top: (trademarkSize || size) === 'xs' || (trademarkSize || size) === 'xxs' ? '-0.15em' : '-0.2em',
-              right: (trademarkSize || size) === 'xs' || (trademarkSize || size) === 'xxs' ? '-0.6em' : '-0.8em',
-              fontSize: (trademarkSize || size) === 'xxs' ? '0.2em' : 
-                       (trademarkSize || size) === 'xs' ? '0.25em' : '0.4em'
+              top: '-1.0em',
+              right: '-1.5em',
+              fontSize: '0.15em'
             }}
           >
             ®

@@ -7,10 +7,253 @@ import { Mic, MicOff, X, Play, Square, Check, RotateCcw } from 'lucide-react'
 interface VoiceInputModalProps {
   isOpen: boolean
   onClose: () => void
-  onTaskAdded: (task: { id: number; title: string; category: string; priority: "low" | "medium" | "high"; dueDate: Date; completed: boolean; createdAt: Date }) => void
+  onTaskAdded: (title: string, category: string, dueDate?: string) => void
 }
 
 type RecordingState = 'idle' | 'recording' | 'processing' | 'completed'
+
+// Speech Recognition interface
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean
+  interimResults: boolean
+  lang: string
+  start(): void
+  stop(): void
+  abort(): void
+  onresult: ((event: SpeechRecognitionEvent) => void) | null
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null
+  onend: (() => void) | null
+}
+
+interface SpeechRecognitionEvent extends Event {
+  resultIndex: number
+  results: SpeechRecognitionResultList
+}
+
+interface SpeechRecognitionResultList {
+  length: number
+  item(index: number): SpeechRecognitionResult
+  [index: number]: SpeechRecognitionResult
+}
+
+interface SpeechRecognitionResult {
+  length: number
+  item(index: number): SpeechRecognitionAlternative
+  [index: number]: SpeechRecognitionAlternative
+  isFinal: boolean
+}
+
+interface SpeechRecognitionAlternative {
+  transcript: string
+  confidence: number
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string
+  message: string
+}
+
+declare global {
+  interface Window {
+    SpeechRecognition: new () => SpeechRecognition
+    webkitSpeechRecognition: new () => SpeechRecognition
+  }
+}
+
+// Date parsing function
+const parseDateFromText = (text: string): string | null => {
+  console.log('parseDateFromText: Input text:', text)
+  const lowerText = text.toLowerCase()
+  
+  // Common date patterns
+  const patterns = [
+    // "by tomorrow", "by next week", "by next month" - check these first
+    /by\s+(tomorrow|next\s+week|next\s+month|monday|tuesday|wednesday|thursday|friday|saturday|sunday)/i,
+    // "due tomorrow", "due next week", "due next month"
+    /due\s+(tomorrow|next\s+week|next\s+month|monday|tuesday|wednesday|thursday|friday|saturday|sunday)/i,
+    // "on tomorrow", "on next week", "on next month"
+    /on\s+(tomorrow|next\s+week|next\s+month|monday|tuesday|wednesday|thursday|friday|saturday|sunday)/i,
+    // "by October 4th", "by Oct 4"
+    /by\s+(january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+(\d{1,2})(?:st|nd|rd|th)?/i,
+    // "by 10/4", "by 10-4", "by 10.4"
+    /by\s+(\d{1,2})[\/\-\.](\d{1,2})/,
+    // "on October 4th", "on Oct 4"
+    /on\s+(january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+(\d{1,2})(?:st|nd|rd|th)?/i,
+    // "on 10/4", "on 10-4", "on 10.4"
+    /on\s+(\d{1,2})[\/\-\.](\d{1,2})/,
+    // "due October 4th", "due Oct 4"
+    /due\s+(january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+(\d{1,2})(?:st|nd|rd|th)?/i,
+    // "due 10/4", "due 10-4", "due 10.4"
+    /due\s+(\d{1,2})[\/\-\.](\d{1,2})/,
+    // Standalone relative dates (without "by", "due", "on")
+    /\b(tomorrow|next\s+week|next\s+month|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/i,
+    // Month and day anywhere in text (like "October 12th")
+    /\b(january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+(\d{1,2})(?:st|nd|rd|th)?/i,
+    // Numeric dates anywhere in text (like "10/12", "10-12", "10.12")
+    /\b(\d{1,2})[\/\-\.](\d{1,2})\b/,
+  ]
+  
+  for (const pattern of patterns) {
+    const match = text.match(pattern)
+    console.log('parseDateFromText: Testing pattern:', pattern, 'Match:', match)
+    if (match) {
+      console.log('parseDateFromText: Found match:', match[0])
+      try {
+        const now = new Date()
+        const currentYear = now.getFullYear()
+        
+        if (match[0].includes('tomorrow')) {
+          const tomorrow = new Date()
+          tomorrow.setDate(tomorrow.getDate() + 1)
+          return tomorrow.toISOString()
+        } else if (match[0].includes('next week')) {
+          const nextWeek = new Date()
+          nextWeek.setDate(nextWeek.getDate() + 7)
+          return nextWeek.toISOString()
+        } else if (match[0].includes('next month')) {
+          const nextMonth = new Date()
+          nextMonth.setMonth(nextMonth.getMonth() + 1)
+          return nextMonth.toISOString()
+        } else if (match[1] && ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].includes(match[1].toLowerCase())) {
+          // Handle day names
+          const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+          const targetDay = dayNames.indexOf(match[1].toLowerCase())
+          const today = new Date()
+          const currentDay = today.getDay()
+          
+          let daysUntilTarget = targetDay - currentDay
+          if (daysUntilTarget <= 0) {
+            daysUntilTarget += 7 // Next week
+          }
+          
+          const targetDate = new Date()
+          targetDate.setDate(today.getDate() + daysUntilTarget)
+          return targetDate.toISOString()
+        } else if (match[0] && ['tomorrow', 'next week', 'next month', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].includes(match[0].toLowerCase())) {
+          // Handle standalone relative dates
+          if (match[0].toLowerCase() === 'tomorrow') {
+            const tomorrow = new Date()
+            tomorrow.setDate(tomorrow.getDate() + 1)
+            return tomorrow.toISOString()
+          } else if (match[0].toLowerCase() === 'next week') {
+            const nextWeek = new Date()
+            nextWeek.setDate(nextWeek.getDate() + 7)
+            return nextWeek.toISOString()
+          } else if (match[0].toLowerCase() === 'next month') {
+            const nextMonth = new Date()
+            nextMonth.setMonth(nextMonth.getMonth() + 1)
+            return nextMonth.toISOString()
+          } else if (['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].includes(match[0].toLowerCase())) {
+            // Handle standalone day names
+            const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+            const targetDay = dayNames.indexOf(match[0].toLowerCase())
+            const today = new Date()
+            const currentDay = today.getDay()
+            
+            let daysUntilTarget = targetDay - currentDay
+            if (daysUntilTarget <= 0) {
+              daysUntilTarget += 7 // Next week
+            }
+            
+            const targetDate = new Date()
+            targetDate.setDate(today.getDate() + daysUntilTarget)
+            return targetDate.toISOString()
+          }
+        } else if (match[1] && match[2]) {
+          // Handle month name and day
+          const monthNames = [
+            'january', 'february', 'march', 'april', 'may', 'june',
+            'july', 'august', 'september', 'october', 'november', 'december'
+          ]
+          const monthAbbrs = [
+            'jan', 'feb', 'mar', 'apr', 'may', 'jun',
+            'jul', 'aug', 'sep', 'oct', 'nov', 'dec'
+          ]
+          
+          let monthIndex = -1
+          const monthName = match[1].toLowerCase()
+          
+          if (monthNames.includes(monthName)) {
+            monthIndex = monthNames.indexOf(monthName)
+          } else if (monthAbbrs.includes(monthName)) {
+            monthIndex = monthAbbrs.indexOf(monthName)
+          }
+          
+          if (monthIndex !== -1) {
+            const day = parseInt(match[2])
+            const date = new Date(currentYear, monthIndex, day)
+            
+            // If the date has passed this year, assume next year
+            if (date < now) {
+              date.setFullYear(currentYear + 1)
+            }
+            
+            return date.toISOString()
+          }
+        } else if (match[1] && match[2] && !isNaN(parseInt(match[1])) && !isNaN(parseInt(match[2]))) {
+          // Handle numeric dates like "10/4"
+          const month = parseInt(match[1])
+          const day = parseInt(match[2])
+          
+          // Assume MM/DD format if month > 12, otherwise DD/MM
+          let actualMonth, actualDay
+          if (month > 12) {
+            actualMonth = day
+            actualDay = month
+          } else {
+            actualMonth = month
+            actualDay = day
+          }
+          
+          const date = new Date(currentYear, actualMonth - 1, actualDay)
+          
+          // If the date has passed this year, assume next year
+          if (date < now) {
+            date.setFullYear(currentYear + 1)
+          }
+          
+          return date.toISOString()
+        } else if (match[1] && match[2] && isNaN(parseInt(match[1])) && !isNaN(parseInt(match[2]))) {
+          // Handle month name and day anywhere in text (like "October 12th")
+          const monthNames = [
+            'january', 'february', 'march', 'april', 'may', 'june',
+            'july', 'august', 'september', 'october', 'november', 'december'
+          ]
+          const monthAbbrs = [
+            'jan', 'feb', 'mar', 'apr', 'may', 'jun',
+            'jul', 'aug', 'sep', 'oct', 'nov', 'dec'
+          ]
+          
+          let monthIndex = -1
+          const monthName = match[1].toLowerCase()
+          
+          if (monthNames.includes(monthName)) {
+            monthIndex = monthNames.indexOf(monthName)
+          } else if (monthAbbrs.includes(monthName)) {
+            monthIndex = monthAbbrs.indexOf(monthName)
+          }
+          
+          if (monthIndex !== -1) {
+            const day = parseInt(match[2])
+            const date = new Date(currentYear, monthIndex, day)
+            
+            // If the date has passed this year, assume next year
+            if (date < now) {
+              date.setFullYear(currentYear + 1)
+            }
+            
+            return date.toISOString()
+          }
+        }
+      } catch (error) {
+        console.error('Error parsing date:', error)
+      }
+    }
+  }
+  
+  console.log('parseDateFromText: No date found in text:', text)
+  return null
+}
 
 export default function VoiceInputModal({ isOpen, onClose, onTaskAdded }: VoiceInputModalProps) {
   const [recordingState, setRecordingState] = useState<RecordingState>('idle')
@@ -20,10 +263,12 @@ export default function VoiceInputModal({ isOpen, onClose, onTaskAdded }: VoiceI
   const [taskTitle, setTaskTitle] = useState('')
   const [taskCategory, setTaskCategory] = useState('Work')
   const [taskPriority, setTaskPriority] = useState<'low' | 'medium' | 'high'>('medium')
+  const [dueDate, setDueDate] = useState<string | null>(null)
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const streamRef = useRef<MediaStream | null>(null)
+  const recognitionRef = useRef<SpeechRecognition | null>(null)
 
   const categories = ['Work', 'Health', 'Personal', 'Learning', 'Other']
 
@@ -35,51 +280,87 @@ export default function VoiceInputModal({ isOpen, onClose, onTaskAdded }: VoiceI
       setTaskTitle('')
       setTaskCategory('Work')
       setTaskPriority('medium')
+      setDueDate(null)
+      
+      // Initialize speech recognition
+      if (typeof window !== 'undefined') {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+        if (SpeechRecognition) {
+          const recognition = new SpeechRecognition()
+          recognition.continuous = false
+          recognition.interimResults = true
+          recognition.lang = 'en-US'
+          
+          recognition.onresult = (event) => {
+            let finalTranscript = ''
+            let interimTranscript = ''
+            
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+              const transcript = event.results[i][0].transcript
+              if (event.results[i].isFinal) {
+                finalTranscript += transcript
+              } else {
+                interimTranscript += transcript
+              }
+            }
+            
+            const fullTranscript = finalTranscript || interimTranscript
+            setTranscript(fullTranscript)
+            
+            // Auto-extract task title and due date from transcript
+            if (finalTranscript) {
+              console.log('VoiceInputModal: Processing transcript:', finalTranscript)
+              
+              // Parse due date from transcript
+              const parsedDate = parseDateFromText(finalTranscript)
+              console.log('VoiceInputModal: Parsed date:', parsedDate)
+              
+              if (parsedDate) {
+                setDueDate(parsedDate)
+                console.log('VoiceInputModal: Set due date to:', parsedDate)
+              }
+              
+              // Simple extraction - take the first sentence or phrase
+              const sentences = finalTranscript.split(/[.!?]/)
+              const extractedTitle = sentences[0]?.trim() || finalTranscript.trim()
+              setTaskTitle(extractedTitle)
+            }
+          }
+          
+          recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error)
+            setRecordingState('idle')
+          }
+          
+          recognition.onend = () => {
+            setRecordingState('completed')
+          }
+          
+          recognitionRef.current = recognition
+        }
+      }
     }
   }, [isOpen])
 
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      streamRef.current = stream
-      
-      const mediaRecorder = new MediaRecorder(stream)
-      mediaRecorderRef.current = mediaRecorder
-      
-      const chunks: BlobPart[] = []
-      
-      mediaRecorder.ondataavailable = (event) => {
-        chunks.push(event.data)
+      if (recognitionRef.current) {
+        setRecordingState('recording')
+        recognitionRef.current.start()
+      } else {
+        throw new Error('Speech recognition not available')
       }
-      
-      mediaRecorder.onstop = () => {
-        const blob = new Blob(chunks, { type: 'audio/wav' })
-        setAudioBlob(blob)
-        // Simulate transcription
-        setTimeout(() => {
-          setTranscript("I need to finish the quarterly report by Friday")
-          setTaskTitle("Finish quarterly report")
-          setRecordingState('completed')
-        }, 2000)
-      }
-      
-      mediaRecorder.start()
-      setRecordingState('recording')
     } catch (error) {
-      console.error('Error accessing microphone:', error)
-      alert('Please allow microphone access to use voice input')
+      console.error('Error starting speech recognition:', error)
+      alert('Speech recognition not supported in this browser. Please use Chrome or Edge.')
+      setRecordingState('idle')
     }
   }
 
   const stopRecording = () => {
-    if (mediaRecorderRef.current && recordingState === 'recording') {
-      mediaRecorderRef.current.stop()
+    if (recognitionRef.current && recordingState === 'recording') {
+      recognitionRef.current.stop()
       setRecordingState('processing')
-      
-      // Stop all tracks
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach(track => track.stop())
-      }
     }
   }
 
@@ -101,23 +382,23 @@ export default function VoiceInputModal({ isOpen, onClose, onTaskAdded }: VoiceI
   // }
 
   const handleSubmit = () => {
-    const newTask = {
-      id: Date.now(),
-      title: taskTitle,
-      category: taskCategory,
-      priority: taskPriority as "low" | "medium" | "high",
-      dueDate: new Date(Date.now() + 24 * 60 * 60 * 1000), // Tomorrow
-      completed: false,
-      createdAt: new Date()
+    if (!taskTitle.trim()) {
+      alert('Please enter a task title')
+      return
     }
-    
-    onTaskAdded(newTask)
+    console.log('VoiceInputModal: Submitting task with dueDate:', dueDate)
+    onTaskAdded(taskTitle, taskCategory, dueDate || undefined)
+    onClose()
   }
 
   const resetRecording = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.abort()
+    }
     setRecordingState('idle')
     setTranscript('')
     setTaskTitle('')
+    setDueDate(null)
     setAudioBlob(null)
     if (audioRef.current) {
       audioRef.current.pause()

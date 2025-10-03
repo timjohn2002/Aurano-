@@ -89,18 +89,24 @@ export default function FeaturesSection() {
               </div>
 
               {/* Content */}
-              <div className="flex flex-col h-full flex-1 space-y-2 sm:space-y-3 lg:space-y-4 xl:space-y-5 2xl:space-y-6 3xl:space-y-7 4xl:space-y-8 5xl:space-y-9">
-                <div className="flex items-center justify-center">
-                  <h3 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl 3xl:text-6xl 4xl:text-7xl 5xl:text-8xl font-serif font-semibold text-beige">
+              <div className="flex flex-col h-full flex-1">
+                <div className="flex items-start justify-center relative" style={{ minHeight: '4rem' }}>
+                  <h3 
+                    className={`text-xl sm:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl 3xl:text-6xl 4xl:text-7xl 5xl:text-8xl font-serif font-semibold text-center leading-tight ${
+                      feature.title === 'Record with voice' ? 'text-beige' : 'text-beige translate-y-4'
+                    }`}
+                  >
                     {feature.title}
                   </h3>
                 </div>
-                <div className="flex items-start justify-center">
-                  <p className="text-base sm:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl 5xl:text-6xl text-beige/80 font-medium">
+                <div className="flex items-center justify-center h-12 sm:h-16 lg:h-20 xl:h-24 2xl:h-28 3xl:h-32 4xl:h-36 5xl:h-40">
+                  <p className={`text-base sm:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl 3xl:text-4xl 4xl:text-5xl 5xl:text-6xl text-beige/80 font-medium ${
+                    feature.description === 'Record with voice' ? '-translate-y-4' : ''
+                  }`}>
                     {feature.description}
                   </p>
                 </div>
-                <div className="flex-1 flex items-start justify-center">
+                <div className="flex items-start justify-center">
                   <p className="text-sm sm:text-base lg:text-lg xl:text-xl 2xl:text-2xl 3xl:text-3xl 4xl:text-4xl 5xl:text-5xl text-beige/60 leading-relaxed">
                     {feature.details}
                   </p>

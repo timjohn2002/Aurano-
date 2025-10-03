@@ -49,7 +49,7 @@ const problems = [
 
 export default function ProblemsSection() {
   return (
-    <section id="problems" className="py-8 sm:py-20 lg:py-24 xl:py-32 2xl:py-40 bg-black relative">
+    <section id="problems" className="pt-0 pb-8 sm:py-20 lg:py-24 xl:py-32 2xl:py-40 bg-black relative">
       {/* Background Effects */}
       <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/4 w-64 h-64 sm:w-96 sm:h-96 bg-beige/5 rounded-full blur-3xl"></div>
